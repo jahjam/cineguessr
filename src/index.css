@@ -1,4 +1,15 @@
 :root {
+  --primary-theme-color: #529b9c;
+  --secondary-theme-color: #eac392;
+  --tertiary-theme-color: #d27575;
+
+  --dark-theme-color: #675a55;
+  --light-dark-color: #9cba8f;
+
+  --white-theme-color: #fffffc;
+  --black-theme-color: #131313;
+
+  --title-theme-font-family: ccmonstermash, sans-serif;
 }
 
 *,
@@ -12,4 +23,11 @@
 html {
   font-size: 62.5%;
   box-sizing: border-box;
+}
+
+body {
+  font-family: short-films, sans-serif;
+  font-size: 1.6rem;
+
+  background-color: var(--black-theme-color);
 }
