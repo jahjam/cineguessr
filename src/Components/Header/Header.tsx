@@ -1,8 +1,10 @@
+import * as Styled from './styles';
+
 const Header = () => {
   return (
-    <header>
-      <h1>CineGuessr</h1>
-    </header>
+    <Styled.Header>
+      <Styled.Title>CineGuessr</Styled.Title>
+    </Styled.Header>
   );
 };
 
