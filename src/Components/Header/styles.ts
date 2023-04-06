@@ -4,6 +4,7 @@ import { flex } from '../styled-utils/mixins';
 export const Header = styled.header`
   background-color: var(--black-theme-color);
   height: 8rem;
+  padding: 2rem;
 
   ${flex}
 `;
