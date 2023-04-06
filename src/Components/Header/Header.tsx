@@ -5,7 +5,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
 const Header = () => {
   const numberOfDaysSinceLaunch = formatDistanceToNowStrict(LAUNCH_DATE, {
     unit: 'day',
-  }).slice(0, 1);
+  }).match(/([0-9])/g);
 
   return (
     <Styled.Header justify="space-between">
