@@ -1,13 +1,20 @@
 import * as Styled from './styles';
-import SettingsIcon from '@mui/icons-material/Settings';
-import MenuIcon from '@mui/icons-material/Menu';
+import { LAUNCH_DATE } from '../../config';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 const Header = () => {
+  const numberOfDaysSinceLaunch = formatDistanceToNowStrict(LAUNCH_DATE, {
+    unit: 'day',
+  }).slice(0, 1);
+
   return (
     <Styled.Header justify="space-between">
-      <MenuIcon sx={{ fontSize: 30, color: 'white', cursor: 'pointer' }} />
-      <Styled.Title>CineGuessr</Styled.Title>
-      <SettingsIcon sx={{ fontSize: 30, color: 'white', cursor: 'pointer' }} />
+      <Styled.InfoIcon />
+      <Styled.HeaderContainer direction="column" gap={0.4}>
+        <Styled.Title>CineGuessr</Styled.Title>
+        <Styled.SubTitle>Day {numberOfDaysSinceLaunch}</Styled.SubTitle>
+      </Styled.HeaderContainer>
+      <Styled.SettingsIcon />
     </Styled.Header>
   );
 };
