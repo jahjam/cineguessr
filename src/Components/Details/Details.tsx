@@ -1,5 +1,18 @@
+import * as Styled from './styles';
+
 const Details = () => {
-  return <section></section>;
+  return (
+    <Styled.Container>
+      <h2>HINT</h2>
+      <div>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div></div>
+    </Styled.Container>
+  );
 };
 
 export default Details;
