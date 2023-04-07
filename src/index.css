@@ -29,5 +29,7 @@ body {
   font-family: short-films, sans-serif;
   font-size: 1.6rem;
 
+  color: var(--white-theme-color);
+
   background-color: var(--black-theme-color);
 }
