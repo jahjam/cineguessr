@@ -10,6 +10,9 @@
   --black-theme-color: #131313;
 
   --title-theme-font-family: ccmonstermash, sans-serif;
+
+  --primary-theme-border: solid 0.2rem var(--white-theme-color);
+  --primary-theme-border-radius: 0.4rem;
 }
 
 *,
