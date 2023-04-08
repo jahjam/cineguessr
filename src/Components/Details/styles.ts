@@ -22,8 +22,8 @@ export const Hint = styled.h2`
 export const Data = styled.div`
   width: 100%;
   padding: 0.8rem;
-  border: solid 0.2rem var(--white-theme-color);
-  border-radius: 0.4rem;
+  border: var(--primary-theme-border);
+  border-radius: var(--primary-theme-border-radius);
 
   ${flex}
 
