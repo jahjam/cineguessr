@@ -1,0 +1,3 @@
+### What do the cards depict?
+
+- The cards depict key themes from a movie, and not the literal name of a movie. For example, I Robot would not be a card showing an eye, followed by a card showing a robot, but perhaps one card that shows a cube with a face (viki the AI from the film), and a man with a beanie only over one ear (like Will Smith wears in the movie). This will make the cards much more versitle and interesting, plus allow for the cards to not be in any particular wrapping order, like they would be if they depicted the literal title of a movie (how would we display a movie that has two cards for one word vs a movie that has one so that they both make sense but also fit nicely in the cards container UI element).
