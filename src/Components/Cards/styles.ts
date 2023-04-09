@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { flex } from '../styled-utils/mixins';
 
 export const Cards = styled.section`
-  height: 14rem;
+  height: auto;
 
   margin: 1rem 2rem 2rem 2rem;
   padding: 2rem;
@@ -10,6 +10,7 @@ export const Cards = styled.section`
   border-radius: var(--primary-theme-border-radius);
 
   ${flex}
+  flex-wrap: wrap;
 
   & div {
     height: 8rem;
