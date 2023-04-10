@@ -11,6 +11,7 @@ export const Container = styled.section`
   border-radius: var(--primary-theme-border-radius);
 
   ${flex}
+  flex-wrap: wrap;
 
   & div {
     height: 5rem;
