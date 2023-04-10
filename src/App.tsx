@@ -1,6 +1,7 @@
-import Header from './Components/Header/Header';
-import Details from './Components/Details/Details';
-import Cards from './Components/Cards/Cards';
+import Header from './Feature/Header/Header';
+import Details from './Feature/Details/Details';
+import Cards from './Feature/Cards/Cards';
+import Pool from './Feature/Pool/Pool';
 
 const App = () => {
   return (
@@ -8,6 +9,7 @@ const App = () => {
       <Header />
       <Details />
       <Cards />
+      <Pool />
     </>
   );
 };
