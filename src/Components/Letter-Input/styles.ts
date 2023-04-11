@@ -1,18 +1,18 @@
 import styled from 'styled-components';
 import { flex } from '../../styled-utils/mixins';
 
-export const Container = styled.div`
+export const Input = styled.input`
   height: 5rem;
   width: 3rem;
 
   border: var(--primary-theme-border);
   border-radius: var(--primary-theme-border-radius);
+  background-color: transparent;
 
-  ${flex}
-  // have to overwrite inherited from above
-  justify-content: center;
+  text-align: center;
 
-  & span {
-    font-size: 3.2rem;
-  }
+  color: inherit;
+  font-family: inherit;
+  caret-color: transparent;
+  font-size: 3.2rem;
 `;
