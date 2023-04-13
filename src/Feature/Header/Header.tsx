@@ -9,12 +9,12 @@ const Header = () => {
 
   return (
     <Styled.Header justify="space-between">
-      <Styled.InfoIcon />
+      <Styled.InfoIcon tabIndex={0} />
       <Styled.HeaderContainer direction="column" gap={0.4}>
         <Styled.Title>CineGuessr</Styled.Title>
         <Styled.SubTitle>Day {numberOfDaysSinceLaunch}</Styled.SubTitle>
       </Styled.HeaderContainer>
-      <Styled.SettingsIcon />
+      <Styled.SettingsIcon tabIndex={0} />
     </Styled.Header>
   );
 };
