@@ -12,7 +12,7 @@
   --title-theme-font-family: ccmonstermash, sans-serif;
 
   --primary-theme-border: solid 0.2rem var(--white-theme-color);
-  --primary-theme-border-radius: 0.4rem;
+  --primary-theme-border-radius: 0.2rem;
 }
 
 *,
@@ -25,7 +25,7 @@
 
 *:focus {
   outline: none;
-  box-shadow: 0 0 0 0.4rem var(--primary-theme-color);
+  box-shadow: 0 0 0 0.3rem var(--primary-theme-color);
 }
 
 html {
