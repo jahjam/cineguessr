@@ -3,7 +3,6 @@ import { flex } from '../../styled-utils/mixins';
 import { ReactComponent as ClapperboardIconSVG } from '../../assets/clapperboard.svg';
 
 export const Container = styled.section`
-  margin-top: 1rem;
   height: 10rem;
   width: 100%;
 
@@ -30,6 +29,8 @@ export const Data = styled.div`
   & span {
     font-size: 1.4rem;
     align-self: flex-start;
+
+    letter-spacing: 0.02rem;
   }
 `;
 

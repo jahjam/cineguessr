@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  height: 8rem;
-  width: 8rem;
+  height: 7.8rem;
+  width: 7.8rem;
 
   background-color: white;
 

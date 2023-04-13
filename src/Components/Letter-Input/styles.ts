@@ -1,18 +1,16 @@
 import styled from 'styled-components';
-import { flex } from '../../styled-utils/mixins';
 
 export const Input = styled.input`
   height: 5rem;
-  width: 3rem;
+  width: 100%;
 
-  border: var(--primary-theme-border);
-  border-radius: var(--primary-theme-border-radius);
+  border: none;
+  border-bottom: var(--primary-theme-border);
   background-color: transparent;
 
   text-align: center;
 
   color: inherit;
   font-family: inherit;
-  caret-color: transparent;
-  font-size: 3.2rem;
+  font-size: 3rem;
 `;

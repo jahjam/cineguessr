@@ -4,8 +4,9 @@ import { ReactComponent as SettingsIconSVG } from '../../assets/settings.svg';
 import { flex } from '../../styled-utils/mixins';
 
 export const Header = styled.header`
+  width: 100%;
   background-color: var(--black-theme-color);
-  height: 10rem;
+  height: 8rem;
   padding: 2rem;
 
   border-bottom: solid 0.2rem var(--white-theme-color);
