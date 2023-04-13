@@ -1,7 +1,20 @@
 import * as Styled from './styles';
 
-const LetterInput = () => {
-  return <Styled.Input type="text" maxLength={1}></Styled.Input>;
+type LetterInputProps = {
+  input: string[];
+};
+
+const LetterInput = ({ input }: LetterInputProps) => {
+  const formattedInput = input.join('');
+
+  return (
+    <Styled.Input
+      type="text"
+      placeholder="I Robot"
+      value={formattedInput}
+      disabled
+    />
+  );
 };
 
 export default LetterInput;
