@@ -4,7 +4,7 @@ import ArtCard from '../../Components/Art-Cart/Art-Cart';
 
 const Cards = () => {
   return (
-    <Styled.Cards justify="flex-start" gap={1.8}>
+    <Styled.Cards justify="flex-start" gap={2}>
       <ArtCard />
       <ArtCard />
       <ArtCard />
