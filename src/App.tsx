@@ -4,7 +4,7 @@ import Header from './Feature/Header/Header';
 import Details from './Feature/Details/Details';
 import Cards from './Feature/Cards/Cards';
 import Pool from './Feature/Pool/Pool';
-import Input from './Feature/Input/Input';
+import Input from './Feature/Display/Display';
 import Keyboard from './Feature/Keyboard/Keyboard';
 import styled from 'styled-components';
 import { flex } from './styled-utils/mixins';
