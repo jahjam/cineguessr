@@ -1,16 +1,25 @@
+import { useContext, useRef } from 'react';
 import * as Styled from './styles';
+import InputContext from '../../store/input-context';
 
 type KeyProps = {
   letter: string;
 };
 
 const Key = ({ letter }: KeyProps) => {
+  const keyEl = useRef<HTMLButtonElement>(null);
+  const inputContext = useContext(InputContext);
+
+  const { handleSetInput } = inputContext;
+
   const handleClick = () => {
-    console.log(letter);
+    handleSetInput(letter);
+
+    keyEl.current?.blur();
   };
 
   return (
-    <Styled.Key tabIndex={0} onClick={handleClick}>
+    <Styled.Key ref={keyEl} tabIndex={0} onClick={handleClick}>
       <span>{letter.toUpperCase()}</span>
     </Styled.Key>
   );

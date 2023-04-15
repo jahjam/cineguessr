@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import Header from './Feature/Header/Header';
 import Details from './Feature/Details/Details';
@@ -14,17 +14,38 @@ const AppContainer = styled.div`
 `;
 
 const App = () => {
-  const [keyDown, setKeyDown] = useState<string>('');
-  const [input, setInput] = useState<string>('');
+  // const [keyDown, setKeyDown] = useState<string>('');
+  // const [input, setInput] = useState<string>('');
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    setKeyDown(e.key);
-    setInput(prevState => (prevState += e.key));
-  };
+  // const handleSetInput = (key: string) => {
+  //   if (key === 'Backspace') {
+  //     return setInput(prevState => prevState.slice(0, -1));
+  //   }
 
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-  }, []);
+  //   if (key === 'Spacebar') {
+  //     return setInput(prevState => (prevState += ' '));
+  //   }
+
+  //   setInput(prevState => (prevState += key));
+  // };
+
+  // const handleKeyDown = useCallback(
+  //   (e: KeyboardEvent) => {
+  //     if (e.key === 'Backspace') {
+  //       return setInput(prevState => prevState.slice(0, -1));
+  //     }
+
+  //     if (e.key.length !== 1) return;
+
+  //     setKeyDown(e.key);
+  //     setInput(prevState => (prevState += e.key));
+  //   },
+  //   [keyDown]
+  // );
+
+  // useEffect(() => {
+  //   document.addEventListener('keydown', handleKeyDown);
+  // }, []);
 
   return (
     <AppContainer direction="column">
@@ -32,8 +53,8 @@ const App = () => {
       <Details />
       <Cards />
       <Pool />
-      <Input input={input} />
-      <Keyboard keyDown={keyDown} />
+      <Input />
+      <Keyboard />
     </AppContainer>
   );
 };

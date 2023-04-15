@@ -2,18 +2,31 @@ import * as Styled from './styles';
 
 import Key from '../../Components/Key/Key';
 
+import InputContext from '../../store/input-context';
+import { useContext, useRef } from 'react';
+
 const KEYS = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
   ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
   ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
 ];
 
-type KeyboardProps = {
-  keyDown: string;
-};
+const Keyboard = () => {
+  const spacebar = useRef<HTMLDivElement>(null);
 
-const Keyboard = ({ keyDown }: KeyboardProps) => {
-  console.log(keyDown);
+  const inputContext = useContext(InputContext);
+
+  const { handleSetInput } = inputContext;
+
+  const handleBackspaceIconClick = () => {
+    handleSetInput('Backspace');
+  };
+
+  const handleSpacebar = () => {
+    handleSetInput('Spacebar');
+
+    spacebar.current?.blur();
+  };
 
   return (
     <Styled.Keyboard direction="column">
@@ -26,7 +39,10 @@ const Keyboard = ({ keyDown }: KeyboardProps) => {
             {keyRow.map((key, i) => {
               return <Key key={i} letter={key} />;
             })}
-            <Styled.IconContainer tabIndex={0}>
+            <Styled.IconContainer
+              tabIndex={0}
+              onClick={handleBackspaceIconClick}
+            >
               <Styled.BackspaceIcon />
             </Styled.IconContainer>
           </Styled.Row>
@@ -38,7 +54,7 @@ const Keyboard = ({ keyDown }: KeyboardProps) => {
           </Styled.Row>
         )
       )}
-      <Styled.Spacebar tabIndex={0} />
+      <Styled.Spacebar ref={spacebar} tabIndex={0} onClick={handleSpacebar} />
     </Styled.Keyboard>
   );
 };
