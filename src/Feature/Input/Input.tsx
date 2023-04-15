@@ -3,7 +3,7 @@ import * as Styled from './styles';
 import LetterInput from '../../Components/Letter-Input/Letter-Input';
 
 type InputProps = {
-  input: string[];
+  input: string;
 };
 
 const Input = ({ input }: InputProps) => {

@@ -15,11 +15,11 @@ const AppContainer = styled.div`
 
 const App = () => {
   const [keyDown, setKeyDown] = useState<string>('');
-  const [input, setInput] = useState<string[]>([]);
+  const [input, setInput] = useState<string>('');
 
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     setKeyDown(e.key);
-    setInput(prevState => [...prevState, e.key]);
+    setInput(prevState => (prevState += e.key));
   };
 
   useEffect(() => {

@@ -1,11 +1,11 @@
 import * as Styled from './styles';
 
 type LetterInputProps = {
-  input: string[];
+  input: string;
 };
 
 const LetterInput = ({ input }: LetterInputProps) => {
-  const formattedInput = input.join('');
+  const formattedInput = input;
 
   return (
     <Styled.Input
