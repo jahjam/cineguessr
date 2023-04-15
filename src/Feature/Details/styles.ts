@@ -4,7 +4,7 @@ import { ReactComponent as ClapperboardIconSVG } from '../../assets/clapperboard
 
 export const Container = styled.section`
   height: 10rem;
-  width: 100%;
+  width: 40rem;
 
   padding: 2rem;
 
