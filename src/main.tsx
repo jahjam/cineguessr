@@ -4,12 +4,15 @@ import App from './App';
 import './index.css';
 import { InputContextProvider } from './store/input-context';
 import { GameContextProvider } from './store/game-context';
+import { KeyDownContextProvider } from './store/key-down-context';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <GameContextProvider>
       <InputContextProvider>
-        <App />
+        <KeyDownContextProvider>
+          <App />
+        </KeyDownContextProvider>
       </InputContextProvider>
     </GameContextProvider>
   </React.StrictMode>
