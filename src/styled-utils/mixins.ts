@@ -1,4 +1,4 @@
-import { css } from 'styled-components';
+import { css, keyframes } from 'styled-components';
 
 interface FlexProps {
   readonly align?: string;
@@ -13,4 +13,28 @@ export const flex = css<FlexProps>`
   align-items: ${({ align }) => align || 'center'};
   justify-content: ${({ justify }) => justify || 'center'};
   gap: ${({ gap }) => gap || 2}rem;
+`;
+
+export const flashKF = keyframes`
+  from {
+    transform: scale(100%);
+  }
+
+  to {
+    transform: scale(110%);
+    background-color: var(--secondary-theme-color);
+    color: var(--black-theme-color);
+  }
+`;
+
+export const flashSpacebarKF = keyframes`
+  from {
+    transform: scale(100%);
+  }
+
+  to {
+    transform: scale(102%);
+    background-color: var(--secondary-theme-color);
+    color: var(--black-theme-color);
+  }
 `;
