@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 
 export type ContextDefaults = {
-  keyDown: string;
   input: string;
   handleSetInput: Function;
   setSubmit: Function;
@@ -9,7 +8,6 @@ export type ContextDefaults = {
 };
 
 const contextDefaults = {
-  keyDown: '',
   input: '',
   handleSetInput: (key: string) => {},
   setSubmit: () => {},
@@ -23,7 +21,6 @@ type Props = {
 };
 
 export const InputContextProvider = ({ children }: Props) => {
-  const [keyDown, setKeyDown] = useState<string>('');
   const [input, setInput] = useState<string>('');
   const [submit, setSubmit] = useState<boolean>(false);
 
@@ -44,30 +41,7 @@ export const InputContextProvider = ({ children }: Props) => {
     setInput(prevState => (prevState += key));
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Backspace') {
-      return setInput(prevState => prevState.slice(0, -1));
-    }
-
-    if (e.key === 'Enter') {
-      setInput('');
-      return setSubmit(true);
-    }
-
-    if (e.key.length !== 1) return;
-
-    setKeyDown(e.key);
-    setInput(prevState => (prevState += e.key));
-  };
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-  }, []);
-
-  console.log(input);
-
   const contextValue = {
-    keyDown,
     input,
     handleSetInput,
     setSubmit,
