@@ -1,5 +1,3 @@
-import { useCallback, useEffect, useState } from 'react';
-
 import Header from './Feature/Header/Header';
 import Details from './Feature/Details/Details';
 import Cards from './Feature/Cards/Cards';
@@ -8,44 +6,21 @@ import Input from './Feature/Display/Display';
 import Keyboard from './Feature/Keyboard/Keyboard';
 import styled from 'styled-components';
 import { flex } from './styled-utils/mixins';
+import { useContext, useEffect } from 'react';
+import InputContext from './store/input-context';
 
 const AppContainer = styled.div`
   ${flex}
 `;
 
 const App = () => {
-  // const [keyDown, setKeyDown] = useState<string>('');
-  // const [input, setInput] = useState<string>('');
+  const inputContext = useContext(InputContext);
 
-  // const handleSetInput = (key: string) => {
-  //   if (key === 'Backspace') {
-  //     return setInput(prevState => prevState.slice(0, -1));
-  //   }
+  const { setSubmit, submit } = inputContext;
 
-  //   if (key === 'Spacebar') {
-  //     return setInput(prevState => (prevState += ' '));
-  //   }
-
-  //   setInput(prevState => (prevState += key));
-  // };
-
-  // const handleKeyDown = useCallback(
-  //   (e: KeyboardEvent) => {
-  //     if (e.key === 'Backspace') {
-  //       return setInput(prevState => prevState.slice(0, -1));
-  //     }
-
-  //     if (e.key.length !== 1) return;
-
-  //     setKeyDown(e.key);
-  //     setInput(prevState => (prevState += e.key));
-  //   },
-  //   [keyDown]
-  // );
-
-  // useEffect(() => {
-  //   document.addEventListener('keydown', handleKeyDown);
-  // }, []);
+  useEffect(() => {
+    setSubmit(false);
+  }, [submit]);
 
   return (
     <AppContainer direction="column">
