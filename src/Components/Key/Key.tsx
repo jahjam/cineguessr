@@ -10,7 +10,7 @@ const Key = ({ letter }: KeyProps) => {
   const keyEl = useRef<HTMLButtonElement>(null);
   const inputContext = useContext(InputContext);
 
-  const { handleSetInput } = inputContext;
+  const { keyDown, handleSetInput } = inputContext;
 
   const handleClick = () => {
     handleSetInput(letter);
