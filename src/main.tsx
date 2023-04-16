@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import { InputContextProvider } from './store/input-context';
+import { GameContextProvider } from './store/game-context';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <InputContextProvider>
-      <App />
-    </InputContextProvider>
+    <GameContextProvider>
+      <InputContextProvider>
+        <App />
+      </InputContextProvider>
+    </GameContextProvider>
   </React.StrictMode>
 );
