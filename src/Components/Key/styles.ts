@@ -1,7 +1,11 @@
-import styled from 'styled-components';
-import { flex } from '../../styled-utils/mixins';
+import styled, { css, keyframes } from 'styled-components';
+import { flex, flashKF } from '../../styled-utils/mixins';
 
-export const Key = styled.button`
+interface Props {
+  readonly flash: boolean;
+}
+
+export const Key = styled.button<Props>`
   height: 3rem;
   width: 3rem;
 
@@ -17,6 +21,16 @@ export const Key = styled.button`
   font-family: inherit;
 
   ${flex}
+
+  ${({ flash }) =>
+    flash
+      ? css`
+          animation: ${flashKF} 0.4s alternate;
+          animation-iteration-count: 2;
+        `
+      : css`
+          animation: none;
+        `};
 
   &:hover {
     background-color: var(--secondary-theme-color);
