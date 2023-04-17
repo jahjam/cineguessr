@@ -3,7 +3,7 @@ import { flex } from '../../styled-utils/mixins';
 
 export const Cards = styled.section`
   height: auto;
-  width: 41.6rem;
+  width: 32rem;
 
   margin: 0 2rem;
   padding: 2rem;
