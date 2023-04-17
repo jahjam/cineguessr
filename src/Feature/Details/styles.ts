@@ -4,7 +4,7 @@ import { ReactComponent as ClapperboardIconSVG } from '../../assets/clapperboard
 
 export const Container = styled.section`
   height: 10rem;
-  width: 40rem;
+  width: 36rem;
 
   padding: 2rem;
 
@@ -16,6 +16,10 @@ export const Hint = styled.h2`
   text-decoration: underline;
 
   cursor: pointer;
+
+  &:hover {
+    color: var(--primary-theme-color);
+  }
 `;
 
 export const Data = styled.div`
