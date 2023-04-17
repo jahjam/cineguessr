@@ -24,6 +24,10 @@ export const InfoIcon = styled(InfoIconSVG)`
   color: var(--white-theme-color);
 
   cursor: pointer;
+
+  &:hover {
+    color: var(--primary-theme-color);
+  }
 `;
 
 export const SettingsIcon = styled(SettingsIconSVG)`
@@ -31,6 +35,10 @@ export const SettingsIcon = styled(SettingsIconSVG)`
   color: var(--white-theme-color);
 
   cursor: pointer;
+
+  &:hover {
+    color: var(--primary-theme-color);
+  }
 `;
 
 export const HeaderContainer = styled.div`
