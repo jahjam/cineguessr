@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
+import { gameData } from '../game-data/game-data';
+
+type Card = {
+  card: string;
+  svg: string;
+};
+
+export type Film = { title: string; cards: Array<Card> };
+
 export type ContextDefaults = {
-  film: object;
+  film: Film;
   lives: number;
   guess: string;
   handleSetGuess: Function;
@@ -9,7 +18,7 @@ export type ContextDefaults = {
 };
 
 const contextDefaults = {
-  film: {},
+  film: { title: '', cards: [] },
   lives: 5,
   guess: '',
   handleSetGuess: (guess: string) => {},
@@ -23,17 +32,28 @@ type Props = {
 };
 
 export const GameContextProvider = ({ children }: Props) => {
-  const [film, setFilm] = useState({});
+  const [film, setFilm] = useState<Film>({ title: '', cards: [] });
   const [lives, setLives] = useState(5);
+  const [endState, setEndState] = useState(false);
   const [guess, setGuess] = useState('');
 
   const handleSetGuess = (guess: string) => {
     setGuess(guess);
   };
 
-  const handleSetFilm = (film: object) => {
+  const handleSetFilm = (film: Film) => {
     setFilm(film);
   };
+
+  useEffect(() => {
+    if (lives === 0) setEndState(true);
+
+    const loadFilm = () => {
+      setFilm(gameData[0]);
+    };
+
+    loadFilm();
+  }, [endState]);
 
   const contextValue = {
     film,
