@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { flex } from '../../styled-utils/mixins';
+import { motion } from 'framer-motion';
 
-export const Container = styled.div`
+export const Container = styled(motion.div)`
   height: 4rem;
   width: 2.8rem;
 
