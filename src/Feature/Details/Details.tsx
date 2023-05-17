@@ -1,11 +1,16 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GameContext from '../../store/game-context';
 import * as Styled from './styles';
 
 const Details = () => {
+  const [openClapper, setOpenClapper] = useState(false);
   const gameContext = useContext(GameContext);
 
   const { lives } = gameContext;
+
+  useEffect(() => {
+    setOpenClapper(true);
+  }, [lives]);
 
   return (
     <Styled.Container justify="space-between">
@@ -17,7 +22,14 @@ const Details = () => {
         <span>Average Guess Time: 2m 53s</span>
       </Styled.Data>
       <Styled.Score>
-        <Styled.ClapperboardIcon />
+        <Styled.ClapperboardIcon
+          open={openClapper}
+          onAnimationEnd={() => setOpenClapper(false)}
+        >
+          <div />
+          <div />
+          <div />
+        </Styled.ClapperboardIcon>
         <span>{lives}</span>
       </Styled.Score>
     </Styled.Container>
