@@ -1,4 +1,12 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useContext,
+  useRef,
+} from 'react';
+import GameContext from './game-context';
 
 export type ContextDefaults = {
   input: string;
@@ -23,6 +31,17 @@ type Props = {
 export const InputContextProvider = ({ children }: Props) => {
   const [input, setInput] = useState<string>('');
   const [submit, setSubmit] = useState<boolean>(false);
+  const inputStateRef = useRef<string>('');
+
+  // When the handleSetInput callback is called from another function
+  // we cannot access the state from this context from the callback,
+  // so to get around this we can save the state in a ref which will
+  // update each time the state updates, and this will give us access
+  // instead.
+  inputStateRef.current = input;
+
+  const gameContext = useContext(GameContext);
+  const { handleSetGuess } = gameContext;
 
   const handleSetInput = (key: string) => {
     if (key === 'Backspace') {
@@ -34,6 +53,7 @@ export const InputContextProvider = ({ children }: Props) => {
     }
 
     if (key === 'Enter') {
+      handleSetGuess(inputStateRef.current);
       setInput('');
       return setSubmit(true);
     }
