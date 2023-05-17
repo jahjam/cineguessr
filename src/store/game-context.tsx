@@ -67,6 +67,7 @@ export const GameContextProvider = ({ children }: Props) => {
     if (guess.toLowerCase() === film.title.toLowerCase() && film.title !== '') {
       handleSetAlert('win');
     } else if (lives === 0) {
+      handleSetAlert('lose');
       setEndState(true);
     }
   }, [guess]);
