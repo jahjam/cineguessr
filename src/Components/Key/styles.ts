@@ -40,7 +40,6 @@ export const Key = styled.button<Props>`
   }
 
   & span {
-    margin-top: 0.3rem;
     font-size: 1.8rem;
   }
 `;

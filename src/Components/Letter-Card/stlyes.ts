@@ -13,7 +13,6 @@ export const Container = styled.div`
   justify-content: center;
 
   & span {
-    margin-top: 0.3rem;
     font-size: 2.8rem;
   }
 `;
