@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { flex, openKF } from '../../styled-utils/mixins';
+import { flex, openKF, scaleKF, rotateKF } from '../../styled-utils/mixins';
 
 export const Container = styled.section`
   height: 10rem;
@@ -63,6 +63,40 @@ export const ClapperboardIcon = styled.div<Props>`
 
   border: var(--primary-theme-border);
   border-radius: var(--primary-theme-border-radius);
+
+  ${({ open }) =>
+    open
+      ? css`
+          animation-name: ${rotateKF};
+          transform-origin: left;
+          animation-duration: 0.25s;
+          animation-timing-function: ease-out;
+          animation-iteration-count: 2;
+          animation-direction: alternate;
+        `
+      : css`
+          animation: none;
+        `};
+
+  & span {
+    position: absolute;
+    left: 45%;
+    top: 32%;
+
+    ${({ open }) =>
+      open
+        ? css`
+            animation-name: ${scaleKF};
+            transform-origin: left;
+            animation-duration: 0.25s;
+            animation-timing-function: ease-out;
+            animation-iteration-count: 2;
+            animation-direction: alternate;
+          `
+        : css`
+            animation: none;
+          `};
+  }
 
   & > div:nth-child(2) {
     height: 1.4rem;

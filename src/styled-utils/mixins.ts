@@ -39,6 +39,19 @@ export const flashSpacebarKF = keyframes`
   }
 `;
 
+export const scaleKF = keyframes`
+  to {
+    color: red;
+    transform: scale(110%);
+  }
+`;
+
+export const rotateKF = keyframes`
+  to {
+    transform: rotate(-5deg);
+  }
+`;
+
 export const openKF = keyframes`
   to {
     transform: rotate(-20deg);
