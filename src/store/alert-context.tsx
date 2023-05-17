@@ -28,6 +28,10 @@ export const AlertContextProvider = ({ children }: Props) => {
     if (alert === 'win') {
       console.log(alert);
     }
+
+    if (alert === 'lose') {
+      console.log(alert);
+    }
   });
 
   const contextValue = { alert, handleSetAlert };
