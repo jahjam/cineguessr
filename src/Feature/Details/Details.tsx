@@ -9,7 +9,9 @@ const Details = () => {
   const { lives } = gameContext;
 
   useEffect(() => {
-    setOpenClapper(true);
+    if (lives < 5) {
+      setOpenClapper(true);
+    }
   }, [lives]);
 
   return (
@@ -29,8 +31,8 @@ const Details = () => {
           <div />
           <div />
           <div />
+          <span>{lives}</span>
         </Styled.ClapperboardIcon>
-        <span>{lives}</span>
       </Styled.Score>
     </Styled.Container>
   );
