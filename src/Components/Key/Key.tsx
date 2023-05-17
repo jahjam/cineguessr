@@ -16,7 +16,7 @@ const Key = ({ letter }: KeyProps) => {
   const { keyDown, setKeyDown } = keyDownContext;
   const { input, handleSetInput } = inputContext;
 
-  const handleClick = () => {
+  const handleKeyDown = () => {
     setFlash(true);
     setKeyDown('');
     handleSetInput(letter);
@@ -37,7 +37,7 @@ const Key = ({ letter }: KeyProps) => {
       flash={flash}
       ref={keyEl}
       tabIndex={0}
-      onClick={handleClick}
+      onClick={handleKeyDown}
     >
       <span>{letter.toUpperCase()}</span>
     </Styled.Key>
