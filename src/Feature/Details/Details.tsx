@@ -1,6 +1,12 @@
+import { useContext } from 'react';
+import GameContext from '../../store/game-context';
 import * as Styled from './styles';
 
 const Details = () => {
+  const gameContext = useContext(GameContext);
+
+  const { lives } = gameContext;
+
   return (
     <Styled.Container justify="space-between">
       <Styled.Hint>HINT</Styled.Hint>
@@ -12,7 +18,7 @@ const Details = () => {
       </Styled.Data>
       <Styled.Score>
         <Styled.ClapperboardIcon />
-        <span>3</span>
+        <span>{lives}</span>
       </Styled.Score>
     </Styled.Container>
   );
