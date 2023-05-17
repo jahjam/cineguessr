@@ -13,6 +13,8 @@ export type Film = { title: string; cards: Array<Card> };
 export type ContextDefaults = {
   film: Film;
   lives: number;
+  correctLetters: string[];
+  endState: boolean;
   guess: string;
   handleSetGuess: Function;
   handleSetFilm: Function;
@@ -24,6 +26,8 @@ const contextDefaults = {
   film: { title: '', cards: [] },
   lives: 5,
   guess: '',
+  correctLetters: [],
+  endState: false,
   handleSetGuess: (guess: string) => {},
   handleSetFilm: (film: string) => {},
   handleSetLives: (lives: number) => {},
@@ -43,6 +47,7 @@ export const GameContextProvider = ({ children }: Props) => {
   const [lives, setLives] = useState(5);
   const [endState, setEndState] = useState(false);
   const [guess, setGuess] = useState('');
+  const [correctLetters, setCorrectLetters] = useState<string[]>([]);
 
   const { handleSetAlert } = alertContext;
 
@@ -69,6 +74,14 @@ export const GameContextProvider = ({ children }: Props) => {
     } else if (lives === 0) {
       handleSetAlert('lose');
       setEndState(true);
+    } else {
+      const currCorrectLetters = guess
+        .split('')
+        .filter(
+          char => film.title.toLowerCase().includes(char) && char !== ' '
+        );
+
+      setCorrectLetters(prevState => [...prevState, ...currCorrectLetters]);
     }
   }, [guess]);
 
@@ -83,6 +96,7 @@ export const GameContextProvider = ({ children }: Props) => {
   const contextValue = {
     film,
     guess,
+    correctLetters,
     lives,
     endState,
     handleSetGuess,

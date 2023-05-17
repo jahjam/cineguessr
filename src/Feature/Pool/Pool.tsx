@@ -1,13 +1,19 @@
 import * as Styled from './styles';
 
 import LetterCard from '../../Components/Letter-Card/Letter-Card';
+import { useContext } from 'react';
+import GameContext from '../../store/game-context';
 
 const Pool = () => {
+  const gameContext = useContext(GameContext);
+
+  const { correctLetters } = gameContext;
+
   return (
     <Styled.Container justify="flex-start" gap={1}>
-      <LetterCard letter="R" />
-      <LetterCard letter="B" />
-      <LetterCard letter="T" />
+      {correctLetters.map((letter: string, i: number) => (
+        <LetterCard letter={letter.toUpperCase()} key={i} />
+      ))}
     </Styled.Container>
   );
 };
