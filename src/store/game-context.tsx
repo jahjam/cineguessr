@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { gameData } from '../game-data/game-data';
+import { AlertContext } from './alert-context';
 
 type Card = {
   card: string;
@@ -15,6 +16,8 @@ export type ContextDefaults = {
   guess: string;
   handleSetGuess: Function;
   handleSetFilm: Function;
+  handleSetLives: Function;
+  handleSetEndState: Function;
 };
 
 const contextDefaults = {
@@ -23,6 +26,8 @@ const contextDefaults = {
   guess: '',
   handleSetGuess: (guess: string) => {},
   handleSetFilm: (film: string) => {},
+  handleSetLives: (lives: number) => {},
+  handleSetEndState: (endState: boolean) => {},
 };
 
 const GameContext = React.createContext<ContextDefaults>(contextDefaults);
@@ -32,35 +37,57 @@ type Props = {
 };
 
 export const GameContextProvider = ({ children }: Props) => {
+  const alertContext = useContext(AlertContext);
+
   const [film, setFilm] = useState<Film>({ title: '', cards: [] });
   const [lives, setLives] = useState(5);
   const [endState, setEndState] = useState(false);
   const [guess, setGuess] = useState('');
 
-  const handleSetGuess = (guess: string) => {
-    setGuess(guess);
+  const { handleSetAlert } = alertContext;
+
+  const handleSetGuess = (newGuess: string) => {
+    setLives(prevState => prevState - 1);
+    setGuess(newGuess);
   };
 
   const handleSetFilm = (film: Film) => {
     setFilm(film);
   };
 
-  useEffect(() => {
-    if (lives === 0) setEndState(true);
+  const handleSetLives = (lives: number) => {
+    setLives(lives);
+  };
 
+  const handleSetEndState = (endState: boolean) => {
+    setEndState(endState);
+  };
+
+  useEffect(() => {
+    if (guess.toLowerCase() === film.title.toLowerCase() && film.title !== '') {
+      handleSetAlert('win');
+    } else if (lives === 0) {
+      setEndState(true);
+    }
+  }, [guess]);
+
+  useEffect(() => {
     const loadFilm = () => {
       setFilm(gameData[0]);
     };
 
     loadFilm();
-  }, [endState]);
+  }, []);
 
   const contextValue = {
     film,
     guess,
     lives,
+    endState,
     handleSetGuess,
     handleSetFilm,
+    handleSetLives,
+    handleSetEndState,
   };
 
   return (
