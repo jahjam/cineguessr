@@ -7,7 +7,6 @@ const Input = () => {
   const inputContex = useContext(InputContext);
 
   const { input } = inputContex;
-
   return <Styled.Input type="text" value={input} disabled />;
 };
 
