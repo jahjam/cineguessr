@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { flex } from './styled-utils/mixins';
 import { useContext, useEffect } from 'react';
 import InputContext from './store/input-context';
+import GameContext from './store/game-context';
 
 const AppContainer = styled.div`
   ${flex}
@@ -15,8 +16,10 @@ const AppContainer = styled.div`
 
 const App = () => {
   const inputContext = useContext(InputContext);
+  const gameContext = useContext(GameContext);
 
   const { setSubmit, submit } = inputContext;
+  const { correctLetters } = gameContext;
 
   useEffect(() => {
     setSubmit(false);
@@ -27,7 +30,7 @@ const App = () => {
       <Header />
       <Details />
       <Cards />
-      <Pool />
+      {correctLetters.length !== 0 && <Pool />}
       <Input />
       <Keyboard />
     </AppContainer>
