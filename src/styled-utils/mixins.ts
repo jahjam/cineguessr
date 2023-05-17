@@ -38,3 +38,9 @@ export const flashSpacebarKF = keyframes`
     color: var(--black-theme-color);
   }
 `;
+
+export const openKF = keyframes`
+  to {
+    transform: rotate(-20deg);
+  }
+`;
