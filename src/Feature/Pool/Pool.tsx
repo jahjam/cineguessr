@@ -10,7 +10,13 @@ const Pool = () => {
   const { correctLetters } = gameContext;
 
   return (
-    <Styled.Container justify="flex-start" gap={1}>
+    <Styled.Container
+      transition={{ duration: 0.5 }}
+      initial={{ transform: 'scale(50%)', opacity: 0 }}
+      animate={{ transform: 'scale(100%)', opacity: 1 }}
+      justify="flex-start"
+      gap={1}
+    >
       {correctLetters.map((letter: string, i: number) => (
         <LetterCard letter={letter.toUpperCase()} key={i} />
       ))}
