@@ -81,7 +81,10 @@ export const GameContextProvider = ({ children }: Props) => {
           char => film.title.toLowerCase().includes(char) && char !== ' '
         );
 
-      setCorrectLetters(prevState => [...prevState, ...currCorrectLetters]);
+      setCorrectLetters(prevState => [
+        ...prevState,
+        ...[...new Set(currCorrectLetters)],
+      ]);
     }
   }, [guess]);
 
