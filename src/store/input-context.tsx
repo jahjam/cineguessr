@@ -1,25 +1,14 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useContext,
-  useRef,
-} from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import GameContext from './game-context';
 
 export type ContextDefaults = {
   input: string;
   handleSetInput: Function;
-  setSubmit: Function;
-  submit: boolean;
 };
 
 const contextDefaults = {
   input: '',
   handleSetInput: (key: string) => {},
-  setSubmit: () => {},
-  submit: false,
 };
 
 const InputContext = React.createContext<ContextDefaults>(contextDefaults);
@@ -30,7 +19,6 @@ type Props = {
 
 export const InputContextProvider = ({ children }: Props) => {
   const [input, setInput] = useState<string>('');
-  const [submit, setSubmit] = useState<boolean>(false);
   const inputStateRef = useRef<string>('');
 
   // When the handleSetInput callback is called from another function
@@ -55,7 +43,7 @@ export const InputContextProvider = ({ children }: Props) => {
     if (key === 'Enter') {
       handleSetGuess(inputStateRef.current);
       setInput('');
-      return setSubmit(true);
+      return;
     }
 
     setInput(prevState => (prevState += key));
@@ -64,8 +52,6 @@ export const InputContextProvider = ({ children }: Props) => {
   const contextValue = {
     input,
     handleSetInput,
-    setSubmit,
-    submit,
   };
 
   return (
