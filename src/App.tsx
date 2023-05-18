@@ -6,23 +6,27 @@ import Input from './Feature/Display/Display';
 import Keyboard from './Feature/Keyboard/Keyboard';
 import styled from 'styled-components';
 import { flex } from './styled-utils/mixins';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import InputContext from './store/input-context';
 import GameContext from './store/game-context';
 import DetailsModal from './Feature/DetailsModal/DetailsModal';
+import { AnimatePresence } from 'framer-motion';
 
 const AppContainer = styled.div`
-  position: relative;
-
   ${flex}
 `;
 
 const App = () => {
   const inputContext = useContext(InputContext);
   const gameContext = useContext(GameContext);
+  const [toggleDetailsModal, setToggleDetailsModal] = useState(false);
 
   const { setSubmit, submit } = inputContext;
   const { correctLetters } = gameContext;
+
+  const handleToggleDetailsModal = () => {
+    setToggleDetailsModal(!toggleDetailsModal);
+  };
 
   useEffect(() => {
     setSubmit(false);
@@ -30,8 +34,12 @@ const App = () => {
 
   return (
     <AppContainer direction="column">
-      <DetailsModal />
-      <Header />
+      <AnimatePresence mode="wait">
+        {toggleDetailsModal && (
+          <DetailsModal handleToggleDetailsModal={handleToggleDetailsModal} />
+        )}
+      </AnimatePresence>
+      <Header handleToggleDetailsModal={handleToggleDetailsModal} />
       <Details />
       <Cards />
       {correctLetters.length !== 0 && <Pool />}
