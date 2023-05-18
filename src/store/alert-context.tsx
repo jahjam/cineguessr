@@ -3,11 +3,15 @@ import React, { useEffect, useState } from 'react';
 export type ContextDefaults = {
   alert: string;
   handleSetAlert: Function;
+  endGame: boolean;
+  handleSetEndGame: Function;
 };
 
 const contextDefaults = {
   alert: '',
   handleSetAlert: (alert: string) => {},
+  endGame: false,
+  handleSetEndGame: () => {},
 };
 
 export const AlertContext =
@@ -18,23 +22,18 @@ type Props = {
 };
 
 export const AlertContextProvider = ({ children }: Props) => {
-  const [alert, setAlert] = useState('');
+  const [endGame, setEndGame] = useState(false);
+  const [alert, setAlert] = useState('play');
 
   const handleSetAlert = (alert: string) => {
     setAlert(alert);
   };
 
-  useEffect(() => {
-    if (alert === 'win') {
-      console.log(alert);
-    }
+  const handleSetEndGame = () => {
+    setEndGame(true);
+  };
 
-    if (alert === 'lose') {
-      console.log(alert);
-    }
-  });
-
-  const contextValue = { alert, handleSetAlert };
+  const contextValue = { alert, handleSetAlert, endGame, handleSetEndGame };
 
   return (
     <AlertContext.Provider value={contextValue}>
