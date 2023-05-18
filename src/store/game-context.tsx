@@ -8,7 +8,7 @@ type Card = {
   svg: string;
 };
 
-export type Film = { title: string; cards: Array<Card> };
+export type Film = { title: string; cards: Array<Card>; hint: string };
 
 export type ContextDefaults = {
   film: Film;
@@ -18,7 +18,7 @@ export type ContextDefaults = {
   guess: string;
   handleSetGuess: Function;
   handleSetFilm: Function;
-  handleSetLives: Function;
+  handleDecrementLives: Function;
   handleSetEndState: Function;
 };
 
@@ -30,7 +30,7 @@ const contextDefaults = {
   endState: false,
   handleSetGuess: (guess: string) => {},
   handleSetFilm: (film: string) => {},
-  handleSetLives: (lives: number) => {},
+  handleDecrementLives: (lives: number) => {},
   handleSetEndState: (endState: boolean) => {},
 };
 
@@ -60,8 +60,8 @@ export const GameContextProvider = ({ children }: Props) => {
     setFilm(film);
   };
 
-  const handleSetLives = (lives: number) => {
-    setLives(lives);
+  const handleDecrementLives = (lives: number) => {
+    setLives(prevState => prevState - 1);
   };
 
   const handleSetEndState = (endState: boolean) => {
@@ -103,7 +103,7 @@ export const GameContextProvider = ({ children }: Props) => {
     endState,
     handleSetGuess,
     handleSetFilm,
-    handleSetLives,
+    handleDecrementLives,
     handleSetEndState,
   };
 
