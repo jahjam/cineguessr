@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 
 import { gameData } from '../game-data/game-data';
 import { AlertContext } from './alert-context';
@@ -23,7 +23,7 @@ export type ContextDefaults = {
 };
 
 const contextDefaults = {
-  film: { title: '', cards: [] },
+  film: { title: '', cards: [], hint: '' },
   lives: 5,
   guess: '',
   correctLetters: [],
@@ -43,7 +43,7 @@ type Props = {
 export const GameContextProvider = ({ children }: Props) => {
   const alertContext = useContext(AlertContext);
 
-  const [film, setFilm] = useState<Film>({ title: '', cards: [] });
+  const [film, setFilm] = useState<Film>({ title: '', cards: [], hint: '' });
   const [lives, setLives] = useState(5);
   const [endState, setEndState] = useState(false);
   const [guess, setGuess] = useState('');
@@ -51,7 +51,15 @@ export const GameContextProvider = ({ children }: Props) => {
 
   const { handleSetAlert } = alertContext;
 
+  const filmRef = useRef<Film>({ title: '', cards: [], hint: '' });
+
+  filmRef.current = film;
+
   const handleSetGuess = (newGuess: string) => {
+    if (newGuess.toLowerCase() === filmRef.current.title.toLowerCase()) {
+      handleSetAlert('win');
+      return;
+    }
     setLives(prevState => prevState - 1);
     setGuess(newGuess);
   };
@@ -60,7 +68,7 @@ export const GameContextProvider = ({ children }: Props) => {
     setFilm(film);
   };
 
-  const handleDecrementLives = (lives: number) => {
+  const handleDecrementLives = () => {
     setLives(prevState => prevState - 1);
   };
 
@@ -69,9 +77,7 @@ export const GameContextProvider = ({ children }: Props) => {
   };
 
   useEffect(() => {
-    if (guess.toLowerCase() === film.title.toLowerCase() && film.title !== '') {
-      handleSetAlert('win');
-    } else if (lives === 0) {
+    if (lives === 0) {
       handleSetAlert('lose');
       setEndState(true);
     } else {
