@@ -40,4 +40,6 @@ body {
   color: var(--white-theme-color);
 
   background-color: var(--black-theme-color);
+
+  position: relative;
 }
