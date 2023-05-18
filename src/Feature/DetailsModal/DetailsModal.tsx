@@ -1,5 +1,5 @@
-import React from 'react';
 import ArtCard from '../../Components/Art-Cart/Art-Cart';
+import Modal from '../../Components/Modal/Modal';
 import * as Styled from './styles';
 
 type Props = {
@@ -7,29 +7,14 @@ type Props = {
 };
 
 const DetailsModal = ({ handleToggleDetailsModal }: Props) => {
-  const handleCloseModal = (e: React.MouseEvent) => {
-    const modalEl = document.getElementById('modal');
-    const closeIcon = document.getElementById('close-icon');
-    if (modalEl === e.target || closeIcon === e.target) {
-      handleToggleDetailsModal();
-    }
-  };
-
   return (
-    <Styled.Modal
-      initial={{ translateY: 10, opacity: 0 }}
-      animate={{ translateY: 0, opacity: 1, transition: { duration: 0.2 } }}
-      exit={{ translateY: 10, opacity: 0, transition: { duration: 0.2 } }}
-      id="modal"
-      onClick={handleCloseModal}
-    >
-      <Styled.Container direction="column" justify="flex-start">
-        <Styled.CloseIcon id="close-icon" />
+    <Modal handleToggleDetailsModal={handleToggleDetailsModal}>
+      <Styled.DetailsModal direction="column">
         <h3>How to play</h3>
 
         <ArtCard />
 
-        <span>Guess the film in 5 tries.</span>
+        <span>Guess the film in 5 takes.</span>
 
         <ul>
           <li>
@@ -41,15 +26,15 @@ const DetailsModal = ({ handleToggleDetailsModal }: Props) => {
 
         <p>
           <span>HINT</span> you can use your hint if you're stuck. But beware,
-          this will cost you a life.
+          this will cost you a take.
         </p>
 
         <p>
           Cineguessr was created as a portfolio project, you can view the source
           code <a href="#">HERE</a>.
         </p>
-      </Styled.Container>
-    </Styled.Modal>
+      </Styled.DetailsModal>
+    </Modal>
   );
 };
 
