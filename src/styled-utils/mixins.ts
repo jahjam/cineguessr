@@ -41,7 +41,7 @@ export const flashSpacebarKF = keyframes`
 
 export const scaleKF = keyframes`
   to {
-    color: red;
+    color: #ff3333;
     transform: scale(110%);
   }
 `;
