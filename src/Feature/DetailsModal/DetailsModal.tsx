@@ -1,17 +1,28 @@
+import React from 'react';
 import ArtCard from '../../Components/Art-Cart/Art-Cart';
 import * as Styled from './styles';
 
-const DetailsModal = () => {
-  const handleCloseModal = e => {
+type Props = {
+  handleToggleDetailsModal: () => void;
+};
+
+const DetailsModal = ({ handleToggleDetailsModal }: Props) => {
+  const handleCloseModal = (e: React.MouseEvent) => {
     const modalEl = document.getElementById('modal');
     const closeIcon = document.getElementById('close-icon');
     if (modalEl === e.target || closeIcon === e.target) {
-      console.log('here');
+      handleToggleDetailsModal();
     }
   };
 
   return (
-    <Styled.Modal id="modal" onClick={handleCloseModal}>
+    <Styled.Modal
+      initial={{ translateY: 10, opacity: 0 }}
+      animate={{ translateY: 0, opacity: 1, transition: { duration: 0.2 } }}
+      exit={{ translateY: 10, opacity: 0, transition: { duration: 0.2 } }}
+      id="modal"
+      onClick={handleCloseModal}
+    >
       <Styled.Container direction="column" justify="flex-start">
         <Styled.CloseIcon id="close-icon" />
         <h3>How to play</h3>
