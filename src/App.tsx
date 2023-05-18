@@ -9,8 +9,11 @@ import { flex } from './styled-utils/mixins';
 import { useContext, useEffect } from 'react';
 import InputContext from './store/input-context';
 import GameContext from './store/game-context';
+import DetailsModal from './Feature/DetailsModal/DetailsModal';
 
 const AppContainer = styled.div`
+  position: relative;
+
   ${flex}
 `;
 
@@ -27,6 +30,7 @@ const App = () => {
 
   return (
     <AppContainer direction="column">
+      <DetailsModal />
       <Header />
       <Details />
       <Cards />
