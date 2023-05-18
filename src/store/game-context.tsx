@@ -49,7 +49,7 @@ export const GameContextProvider = ({ children }: Props) => {
   const [guess, setGuess] = useState('');
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
 
-  const { handleSetAlert } = alertContext;
+  const { handleSetAlert, handleSetEndGame } = alertContext;
 
   const filmRef = useRef<Film>({ title: '', cards: [], hint: '' });
 
@@ -58,6 +58,7 @@ export const GameContextProvider = ({ children }: Props) => {
   const handleSetGuess = (newGuess: string) => {
     if (newGuess.toLowerCase() === filmRef.current.title.toLowerCase()) {
       handleSetAlert('win');
+      handleSetEndGame(true);
       return;
     }
     setLives(prevState => prevState - 1);
@@ -79,6 +80,7 @@ export const GameContextProvider = ({ children }: Props) => {
   useEffect(() => {
     if (lives === 0) {
       handleSetAlert('lose');
+      handleSetEndGame(true);
       setEndState(true);
     } else {
       const currCorrectLetters = guess
@@ -91,7 +93,7 @@ export const GameContextProvider = ({ children }: Props) => {
         ...[...new Set([...prevState, ...currCorrectLetters])],
       ]);
     }
-  }, [guess]);
+  }, [lives]);
 
   useEffect(() => {
     const loadFilm = () => {
