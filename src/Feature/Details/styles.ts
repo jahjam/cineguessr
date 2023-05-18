@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import styled, { css } from 'styled-components';
 import { flex, openKF, scaleKF, rotateKF } from '../../styled-utils/mixins';
 
@@ -23,10 +24,28 @@ export const Hint = styled.h2`
 
 export const Data = styled.div`
   width: 100%;
-  padding: 0.8rem;
+  height: 8rem;
+
+  perspective: 150rem;
+
+  position: relative;
+`;
+
+const Side = css`
+  width: 100%;
+  height: 100%;
   border: var(--primary-theme-border);
   border-radius: var(--primary-theme-border-radius);
+  position: absolute;
+  top: 0;
+  right: 0;
 
+  backface-visibility: hidden;
+`;
+
+export const DataFront = styled(motion.div)`
+  ${Side}
+  padding: 0.8rem;
   ${flex}
 
   & span {
@@ -35,6 +54,11 @@ export const Data = styled.div`
 
     letter-spacing: 0.02rem;
   }
+`;
+
+export const DataBack = styled(motion.div)`
+  ${Side}
+  ${flex}
 `;
 
 export const Score = styled.div`

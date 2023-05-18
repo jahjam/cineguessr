@@ -6,6 +6,8 @@ export const Container = styled.div`
   height: 7.9rem;
   width: 7.9rem;
 
+  perspective: 150rem;
+
   position: relative;
 `;
 
