@@ -82,8 +82,7 @@ export const GameContextProvider = ({ children }: Props) => {
         );
 
       setCorrectLetters(prevState => [
-        ...prevState,
-        ...[...new Set(currCorrectLetters)],
+        ...[...new Set([...prevState, ...currCorrectLetters])],
       ]);
     }
   }, [guess]);
