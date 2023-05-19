@@ -9,7 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.22.0",
     "date-fns": "^2.29.3",
+    "dotenv": "^16.0.3",
     "framer-motion": "^10.12.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
