@@ -95,6 +95,7 @@ export const GameContextProvider = ({ children }: Props) => {
     }
   }, [lives]);
 
+  // Load the film
   useEffect(() => {
     const loadFilm = () => {
       setFilm(gameData[0]);
