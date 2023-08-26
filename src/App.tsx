@@ -30,13 +30,13 @@ const App = () => {
   };
 
   return (
-    <AppContainer direction="column">
-      <AnimatePresence mode="wait">
+    <AppContainer direction='column'>
+      <AnimatePresence mode='wait'>
         {toggleDetailsModal && (
           <DetailsModal handleToggleDetailsModal={handleToggleDetailsModal} />
         )}
       </AnimatePresence>
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode='wait'>
         {endGame && (
           <EndStateModal handleToggleDetailsModal={handleToggleDetailsModal} />
         )}
