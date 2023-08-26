@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 
 interface User {
-  averageGuessTime?: number;
-  averageTakes?: number;
+  averageGuessTime: number;
+  averageTakes: number;
   createdAt: Date;
-  curCorrectLetters?: string;
-  gamesWon?: number;
-  hasPlayedToday?: boolean;
-  isOnStreak?: boolean;
-  leastTakes?: number;
-  lives?: number;
-  streak?: number;
+  curCorrectLetters: string;
+  gamesWon: number;
+  hasPlayedToday: boolean;
+  isOnStreak: boolean;
+  leastTakes: number;
+  lives: number;
+  streak: number;
   id: number;
   hasStartedToday: boolean;
 }
@@ -77,7 +77,9 @@ export const UserContextProvider = ({ children }: Props) => {
           least_takes: leastTakes,
           lives,
           streak,
-          has_started_today: hasStartedToday
+          has_started_today: hasStartedToday,
+          average_guess_time: averageGuessTime,
+          average_takes: averageTakes
         } = data[0];
 
         setUser({
@@ -90,7 +92,9 @@ export const UserContextProvider = ({ children }: Props) => {
           leastTakes,
           lives,
           streak,
-          hasStartedToday
+          hasStartedToday,
+          averageGuessTime,
+          averageTakes
         });
       };
 
