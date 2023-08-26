@@ -46,7 +46,7 @@ export const UserContextProvider = ({ children }: Props) => {
         const { data, error } = await supabase.from('user').insert({ created_at: new Date() }).select();
 
         if (!data || error) {
-          //TODO HANDLE ERROR STATE
+          // TODO HANDLE ERROR STATE
           console.log(error?.message);
           return;
         }
