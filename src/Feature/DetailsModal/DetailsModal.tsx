@@ -12,6 +12,7 @@ const DetailsModal = ({ handleToggleDetailsModal }: Props) => {
       <Styled.DetailsModal direction="column">
         <h3>How to play</h3>
 
+        // TODO Add example SVG
         <ArtCard />
 
         <span>Guess the film in 5 takes.</span>
