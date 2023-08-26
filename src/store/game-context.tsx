@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 
 import { gameData } from '../game-data/game-data';
 import { AlertContext } from './alert-context';
+import UserContext from './user-context';
 
 type Card = {
   card: string;
@@ -42,14 +43,16 @@ type Props = {
 
 export const GameContextProvider = ({ children }: Props) => {
   const alertContext = useContext(AlertContext);
+  const userContext = useContext(UserContext);
 
   const [film, setFilm] = useState<Film>({ title: '', cards: [], hint: '' });
-  const [lives, setLives] = useState(5);
+  const [lives, setLives] = useState<number>(5);
   const [endState, setEndState] = useState(false);
   const [guess, setGuess] = useState('');
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
 
   const { handleSetAlert, handleSetEndGame } = alertContext;
+  const { user } = userContext;
 
   const filmRef = useRef<Film>({ title: '', cards: [], hint: '' });
 
@@ -102,6 +105,9 @@ export const GameContextProvider = ({ children }: Props) => {
     };
 
     loadFilm();
+
+    if (!user) return;
+    setLives(user.lives);
   }, []);
 
   const contextValue = {
