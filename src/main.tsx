@@ -6,9 +6,11 @@ import { InputContextProvider } from './store/input-context';
 import { GameContextProvider } from './store/game-context';
 import { KeyDownContextProvider } from './store/key-down-context';
 import { AlertContextProvider } from './store/alert-context';
+import { UserContextProvider } from './store/user-context';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
+    <UserContextProvider>
       <AlertContextProvider>
         <GameContextProvider>
           <InputContextProvider>
@@ -18,5 +20,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           </InputContextProvider>
         </GameContextProvider>
       </AlertContextProvider>
+    </UserContextProvider>
   </React.StrictMode>
 );
