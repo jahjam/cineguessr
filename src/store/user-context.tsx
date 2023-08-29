@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient';
 
-interface User {
+export interface User {
   averageGuessTime: number;
   averageTakes: number;
   createdAt: Date;
@@ -18,10 +18,18 @@ interface User {
 
 export type ContextDefaults = {
   user: User | undefined,
+  setUserHasPlayedToday: Function;
+  setUserLives: Function;
+  setUserCorrectLetters: Function;
+  setUserHasWon: Function;
 };
 
 const contextDefaults = {
-  user: undefined
+  user: undefined,
+  setUserHasPlayedToday: async () => {},
+  setUserLives: async (curLives: number) => {},
+  setUserCorrectLetters: async (correctLetters: string) => {},
+  setUserHasWon: async () => {}
 };
 
 export const UserContext =
@@ -33,6 +41,47 @@ type Props = {
 
 export const UserContextProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User | undefined>(undefined);
+  const userRef = useRef<User>();
+  userRef.current = user;
+
+  // TODO handle all supabase errors!
+  const setUserHasPlayedToday = async () => {
+    const { error } = await supabase.from('user').update({ has_played_today: true }).eq('user_id', userRef.current?.id);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+  }
+
+  const setUserLives = async (curLives: number) => {
+    const { error } = await supabase.from('user').update({ lives: curLives }).eq('user_id', userRef.current?.id);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+  }
+
+  const setUserCorrectLetters = async(correctLetters: string) => {
+    const { error } = await supabase.from('user').update({ cur_correct_letters: correctLetters }).eq('user_id', userRef.current?.id);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+  }
+
+  const setUserHasWon = async() => {
+    if (!userRef.current) return;
+
+    const { error } = await supabase.from('user').update({ games_won: userRef.current.gamesWon + 1 }).eq('user_id', userRef.current?.id);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+  }
 
   useEffect(() => {
     // Check local storage to see if user is new
@@ -103,7 +152,11 @@ export const UserContextProvider = ({ children }: Props) => {
   }, []);
 
   const contextValue = {
-    user
+    user,
+    setUserHasPlayedToday,
+    setUserLives,
+    setUserCorrectLetters,
+    setUserHasWon
   };
 
   return (

@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 
 import { gameData } from '../game-data/game-data';
 import { AlertContext } from './alert-context';
-import UserContext from './user-context';
+import UserContext, { User } from './user-context';
+import { supabase } from '../supabaseClient';
 
 type Card = {
   card: string;
@@ -29,10 +30,14 @@ const contextDefaults = {
   guess: '',
   correctLetters: [],
   endState: false,
-  handleSetGuess: (guess: string) => {},
-  handleSetFilm: (film: string) => {},
-  handleDecrementLives: (lives: number) => {},
-  handleSetEndState: (endState: boolean) => {},
+  handleSetGuess: (guess: string) => {
+  },
+  handleSetFilm: (film: string) => {
+  },
+  handleDecrementLives: (lives: number) => {
+  },
+  handleSetEndState: (endState: boolean) => {
+  }
 };
 
 const GameContext = React.createContext<ContextDefaults>(contextDefaults);
@@ -52,19 +57,30 @@ export const GameContextProvider = ({ children }: Props) => {
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
 
   const { handleSetAlert, handleSetEndGame } = alertContext;
-  const { user } = userContext;
+  const { user, setUserHasPlayedToday, setUserLives, setUserCorrectLetters } = userContext;
 
   const filmRef = useRef<Film>({ title: '', cards: [], hint: '' });
+  const userRef = useRef<User>();
 
   filmRef.current = film;
+  userRef.current = user;
 
-  const handleSetGuess = (newGuess: string) => {
+  const handleSetGuess = async (newGuess: string) => {
+    // YOU WIN!
     if (newGuess.toLowerCase() === filmRef.current.title.toLowerCase()) {
       handleSetAlert('win');
       handleSetEndGame(true);
+
+      setUserHasPlayedToday();
+
       return;
     }
-    setLives(prevState => prevState - 1);
+
+    // WRONG GUESS!
+    setLives(prevState => {
+      setUserLives(prevState - 1);
+      return prevState - 1;
+    });
     setGuess(newGuess);
   };
 
@@ -81,10 +97,19 @@ export const GameContextProvider = ({ children }: Props) => {
   };
 
   useEffect(() => {
+    if (user?.hasPlayedToday) {
+      // TODO change to a hasPlayedToday alert
+      handleSetAlert('win');
+      handleSetEndGame(true);
+      return;
+    }
+
     if (lives === 0) {
       handleSetAlert('lose');
       handleSetEndGame(true);
       setEndState(true);
+
+      setUserHasPlayedToday();
     } else {
       const currCorrectLetters = guess
         .split('')
@@ -92,11 +117,21 @@ export const GameContextProvider = ({ children }: Props) => {
           char => film.title.toLowerCase().includes(char) && char !== ' '
         );
 
-      setCorrectLetters(prevState => [
-        ...[...new Set([...prevState, ...currCorrectLetters])],
-      ]);
+      if (!currCorrectLetters.length && user) {
+        setCorrectLetters([...user.curCorrectLetters.split('')]);
+      } else {
+        setCorrectLetters(prevState => {
+          user && setUserCorrectLetters([
+            ...[...new Set([...prevState, ...currCorrectLetters])]
+          ].join(''));
+
+          return [
+            ...[...new Set([...prevState, ...currCorrectLetters])]
+          ];
+        });
+      }
     }
-  }, [lives]);
+  }, [lives, user]);
 
   // Load the film
   useEffect(() => {
@@ -108,7 +143,7 @@ export const GameContextProvider = ({ children }: Props) => {
 
     if (!user) return;
     setLives(user.lives);
-  }, []);
+  }, [user]);
 
   const contextValue = {
     film,
@@ -119,7 +154,7 @@ export const GameContextProvider = ({ children }: Props) => {
     handleSetGuess,
     handleSetFilm,
     handleDecrementLives,
-    handleSetEndState,
+    handleSetEndState
   };
 
   return (
