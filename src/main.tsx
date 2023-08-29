@@ -9,7 +9,6 @@ import { AlertContextProvider } from './store/alert-context';
 import { UserContextProvider } from './store/user-context';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
     <UserContextProvider>
       <AlertContextProvider>
         <GameContextProvider>
@@ -21,5 +20,4 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </GameContextProvider>
       </AlertContextProvider>
     </UserContextProvider>
-  </React.StrictMode>
 );
