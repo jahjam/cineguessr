@@ -4,6 +4,7 @@ import { gameData } from '../game-data/game-data';
 import { AlertContext } from './alert-context';
 import UserContext, { User } from './user-context';
 import { supabase } from '../supabaseClient';
+import { format, isToday } from 'date-fns';
 
 type Card = {
   card: string;
@@ -57,7 +58,15 @@ export const GameContextProvider = ({ children }: Props) => {
   const [correctLetters, setCorrectLetters] = useState<string[]>([]);
 
   const { handleSetAlert, handleSetEndGame } = alertContext;
-  const { user, setUserHasPlayedToday, setUserLives, setUserCorrectLetters } = userContext;
+  const {
+    user,
+    setUserHasPlayedToday,
+    setUserLives,
+    setUserCorrectLetters,
+    setUserHasWon,
+    setUserStreak,
+    breakUserStreak
+  } = userContext;
 
   const filmRef = useRef<Film>({ title: '', cards: [], hint: '' });
   const userRef = useRef<User>();
@@ -72,6 +81,8 @@ export const GameContextProvider = ({ children }: Props) => {
       handleSetEndGame(true);
 
       setUserHasPlayedToday();
+      setUserHasWon();
+      setUserStreak();
 
       return;
     }
@@ -110,6 +121,7 @@ export const GameContextProvider = ({ children }: Props) => {
       setEndState(true);
 
       setUserHasPlayedToday();
+      breakUserStreak();
     } else {
       const currCorrectLetters = guess
         .split('')
@@ -135,11 +147,47 @@ export const GameContextProvider = ({ children }: Props) => {
 
   // Load the film
   useEffect(() => {
-    const loadFilm = () => {
-      setFilm(gameData[0]);
+    const fetchFilmFromDB = async () => {
+      const todaysDate = format(new Date(), 'dd-MM-yyyy');
+      const { data, error } = await supabase.from('game').select().eq('current_day', todaysDate);
+
+      // TODO handle error
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      // the game for this day has already been created, and we can get id to load in the game
+      if (data.length) {
+        console.log('Game exists');
+        setFilm(gameData[data[0].index]);
+      }
+      // else it hasn't, and we must create it and then set the id for the game
+      else {
+        console.log('Game doesn\'t exist');
+        // TODO check films_used table to see if all films have been used, if so, drop table and start again
+        //
+        //
+
+        const { data, error: insertError } = await supabase.from('game').insert({ current_day: todaysDate }).select();
+
+        const randomGameIndex = Math.floor(Math.random() * gameData.length);
+
+        const selectedGame = gameData[randomGameIndex];
+
+        if (!data) return;
+
+        const { error: updateError } = await supabase.from('game').update({
+          film: selectedGame.title.replaceAll(' ', '-').toLowerCase(),
+          index: randomGameIndex
+        }).eq('id', data[0]?.id);
+
+        setFilm(gameData[randomGameIndex]);
+      }
     };
 
-    loadFilm();
+    fetchFilmFromDB();
+
 
     if (!user) return;
     setLives(user.lives);

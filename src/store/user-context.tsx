@@ -22,6 +22,8 @@ export type ContextDefaults = {
   setUserLives: Function;
   setUserCorrectLetters: Function;
   setUserHasWon: Function;
+  setUserStreak: Function;
+  breakUserStreak: Function;
 };
 
 const contextDefaults = {
@@ -29,7 +31,9 @@ const contextDefaults = {
   setUserHasPlayedToday: async () => {},
   setUserLives: async (curLives: number) => {},
   setUserCorrectLetters: async (correctLetters: string) => {},
-  setUserHasWon: async () => {}
+  setUserHasWon: async () => {},
+  setUserStreak: async () => {},
+  breakUserStreak: async () => {},
 };
 
 export const UserContext =
@@ -83,6 +87,28 @@ export const UserContextProvider = ({ children }: Props) => {
     }
   }
 
+  const setUserStreak = async() => {
+    if (!userRef.current) return;
+
+    const { error } = await supabase.from('user').update({ streak: userRef.current.streak + 1 }).eq('user_id', userRef.current?.id);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+  }
+
+  const breakUserStreak = async() => {
+    if (!userRef.current) return;
+
+    const { error } = await supabase.from('user').update({ streak: 0 }).eq('user_id', userRef.current?.id);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+  }
+
   useEffect(() => {
     // Check local storage to see if user is new
     const userId = localStorage.getItem('userId');
@@ -109,7 +135,6 @@ export const UserContextProvider = ({ children }: Props) => {
     else {
       const fetchUser = async () => {
         const { data, error } = await supabase.from('user').select().eq('user_id', userId);
-
         // TODO if userId but no data in DB, account no longer exists (error?), create a new one
         if (!data?.length) {
           return;
@@ -156,7 +181,9 @@ export const UserContextProvider = ({ children }: Props) => {
     setUserHasPlayedToday,
     setUserLives,
     setUserCorrectLetters,
-    setUserHasWon
+    setUserHasWon,
+    setUserStreak,
+    breakUserStreak
   };
 
   return (
