@@ -4,7 +4,7 @@ import { gameData } from '../game-data/game-data';
 import { AlertContext } from './alert-context';
 import UserContext, { User } from './user-context';
 import { supabase } from '../supabaseClient';
-import { format, isToday } from 'date-fns';
+import { format } from 'date-fns';
 
 type Card = {
   card: string;
@@ -159,19 +159,54 @@ export const GameContextProvider = ({ children }: Props) => {
 
       // the game for this day has already been created, and we can get id to load in the game
       if (data.length) {
-        console.log('Game exists');
         setFilm(gameData[data[0].index]);
       }
       // else it hasn't, and we must create it and then set the id for the game
       else {
-        console.log('Game doesn\'t exist');
-        // TODO check films_used table to see if all films have been used, if so, drop table and start again
-        //
-        //
+        // generate random number that hasn't been used before using recursion
+        const generateUnusedRandomNumber = async (): Promise<number> => {
+          let i = Math.floor(Math.random() * gameData.length);
+
+          const {
+            data: filmUsedIndexData,
+            error: selectfilmUsedIndexError
+          } = await supabase.from('films_used').select().eq('film_index', i);
+
+          if (selectfilmUsedIndexError) {
+            console.log(selectfilmUsedIndexError);
+            return 0;
+          }
+
+          if (filmUsedIndexData?.length) {
+            i = await generateUnusedRandomNumber();
+          }
+
+          return i;
+        };
+
+        const { data: filmUsedData, error: selectfilmUsedError } = await supabase.from('films_used').select();
+
+        if (selectfilmUsedError) {
+          console.log('Something went wrong!');
+          return;
+        }
+
+        if (filmUsedData?.length === gameData.length) {
+          // delete all film_used table and start again (this means that all the films have been used);
+          // 1000 is magic number because assuming there'll never been 1000 films in the game
+          await supabase.from('films_used').delete().neq('film_index', 1000);
+        }
+
+        const randomGameIndex = await generateUnusedRandomNumber();
 
         const { data, error: insertError } = await supabase.from('game').insert({ current_day: todaysDate }).select();
 
-        const randomGameIndex = Math.floor(Math.random() * gameData.length);
+        const { error: insertIndexError } = await supabase.from('films_used').insert({ film_index: randomGameIndex });
+
+        if (insertError || insertIndexError) {
+          console.log('Something went wrong!');
+          return;
+        }
 
         const selectedGame = gameData[randomGameIndex];
 
@@ -182,13 +217,19 @@ export const GameContextProvider = ({ children }: Props) => {
           index: randomGameIndex
         }).eq('id', data[0]?.id);
 
+        if (updateError) {
+          console.log('Something went wrong!');
+          return;
+        }
+
         setFilm(gameData[randomGameIndex]);
       }
     };
 
     fetchFilmFromDB();
+  }, []);
 
-
+  useEffect(() => {
     if (!user) return;
     setLives(user.lives);
   }, [user]);
