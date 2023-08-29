@@ -6,7 +6,7 @@ import Input from './Feature/Display/Display';
 import Keyboard from './Feature/Keyboard/Keyboard';
 import styled from 'styled-components';
 import { flex } from './styled-utils/mixins';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GameContext from './store/game-context';
 import DetailsModal from './Feature/DetailsModal/DetailsModal';
 import { AnimatePresence } from 'framer-motion';
