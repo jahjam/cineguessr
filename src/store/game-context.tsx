@@ -50,6 +50,7 @@ type Props = {
 export const GameContextProvider = ({ children }: Props) => {
   const alertContext = useContext(AlertContext);
   const userContext = useContext(UserContext);
+  const todaysDate = format(new Date(), 'dd-MM-yyyy');
 
   const [film, setFilm] = useState<Film>({ title: '', cards: [], hint: '' });
   const [lives, setLives] = useState<number>(5);
@@ -108,13 +109,9 @@ export const GameContextProvider = ({ children }: Props) => {
     setEndState(endState);
   };
 
+  // handle everything about guesses
   useEffect(() => {
-    if (user?.hasPlayedToday) {
-      // TODO change to a hasPlayedToday alert
-      handleSetAlert('win');
-      handleSetEndGame(true);
-      return;
-    }
+    if (!user) return;
 
     if (lives === 0) {
       handleSetAlert('lose');
@@ -146,10 +143,9 @@ export const GameContextProvider = ({ children }: Props) => {
     }
   }, [lives, user]);
 
-  // Load the film
+  // handle everything about loading the film
   useEffect(() => {
     const fetchFilmFromDB = async () => {
-      const todaysDate = format(new Date(), 'dd-MM-yyyy');
       const { data, error } = await supabase.from('game').select().eq('current_day', todaysDate);
 
       // TODO handle error
@@ -223,8 +219,6 @@ export const GameContextProvider = ({ children }: Props) => {
           return;
         }
 
-        resetUserOnNewGame();
-
         setFilm(gameData[randomGameIndex]);
       }
     };
@@ -232,8 +226,23 @@ export const GameContextProvider = ({ children }: Props) => {
     fetchFilmFromDB();
   }, []);
 
+  // handle everything about user
   useEffect(() => {
     if (!user) return;
+    const dateLastPlayed = user?.lastPlayed;
+
+    if (dateLastPlayed !== todaysDate) {
+      resetUserOnNewGame();
+      return;
+    }
+
+    if (user?.hasPlayedToday) {
+      // TODO change to a hasPlayedToday alert
+      handleSetAlert('win');
+      handleSetEndGame(true);
+      return;
+    }
+
     setLives(user.lives);
   }, [user]);
 

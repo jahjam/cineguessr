@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient';
+import { format } from 'date-fns';
 
 export interface User {
   averageGuessTime: number;
@@ -14,6 +15,8 @@ export interface User {
   streak: number;
   id: number;
   hasStartedToday: boolean;
+  lastPlayed: string;
+  hintUsedToday: boolean;
 }
 
 export type ContextDefaults = {
@@ -59,7 +62,10 @@ export const UserContextProvider = ({ children }: Props) => {
 
   // TODO handle all supabase errors!
   const setUserHasPlayedToday = async () => {
-    const { error } = await supabase.from('user').update({ has_played_today: true }).eq('user_id', userRef.current?.id);
+    const { error } = await supabase.from('user').update({
+      has_played_today: true,
+      has_started_today: false
+    }).eq('user_id', userRef.current?.id);
 
     if (error) {
       console.log(error);
@@ -67,8 +73,11 @@ export const UserContextProvider = ({ children }: Props) => {
     }
   };
 
-  const setUserLives = async (curLives: number) => {
-    const { error } = await supabase.from('user').update({ lives: curLives }).eq('user_id', userRef.current?.id);
+  const setUserLives = async (curLives: number, isHint: boolean = false) => {
+    const { error } = await supabase.from('user').update({
+      lives: curLives,
+      hint_used_today: isHint
+    }).eq('user_id', userRef.current?.id);
 
     if (error) {
       console.log(error);
@@ -126,17 +135,44 @@ export const UserContextProvider = ({ children }: Props) => {
 
   const resetUserOnNewGame = async () => {
     if (!userRef.current) return;
-    const { error } = await supabase.from('user').update({
+    const { data, error } = await supabase.from('user').update({
       lives: 5,
       has_played_today: false,
-      cur_current_letters: ''
-    }).eq('user_id', userRef.current?.id);
+      cur_correct_letters: '',
+      has_started_today: true,
+      time_started_today: new Date(),
+      hint_used_today: false,
+      last_played: format(new Date(), 'dd-MM-yyyy')
+    }).eq('user_id', userRef.current?.id).select();
 
 
     if (error) {
       console.log(error);
       return;
     }
+
+    console.log(data);
+
+    const {
+      cur_correct_letters: curCorrectLetters,
+      has_played_today: hasPlayedToday,
+      lives,
+      has_started_today: hasStartedToday,
+      last_played: lastPlayed,
+      hint_used_today, hintUsedToday
+    } = data[0];
+
+    setUser(prevState => {
+      return {
+        ...prevState,
+        curCorrectLetters,
+        hasPlayedToday,
+        lives,
+        hasStartedToday,
+        lastPlayed,
+        hintUsedToday
+      } as User;
+    });
   };
 
   useEffect(() => {
@@ -183,7 +219,9 @@ export const UserContextProvider = ({ children }: Props) => {
           streak,
           has_started_today: hasStartedToday,
           average_guess_time: averageGuessTime,
-          average_takes: averageTakes
+          average_takes: averageTakes,
+          last_played: lastPlayed,
+          hint_used_today: hintUsedToday
         } = data[0];
 
         setUser({
@@ -198,7 +236,9 @@ export const UserContextProvider = ({ children }: Props) => {
           streak,
           hasStartedToday,
           averageGuessTime,
-          averageTakes
+          averageTakes,
+          lastPlayed,
+          hintUsedToday
         });
       };
 
