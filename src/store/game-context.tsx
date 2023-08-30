@@ -113,7 +113,7 @@ export const GameContextProvider = ({ children }: Props) => {
   useEffect(() => {
     if (!user) return;
 
-    if (lives === 0) {
+    if (lives === 0 && !user.hasPlayedToday) {
       handleSetAlert('lose');
       handleSetEndGame(true);
       setEndState(true);
