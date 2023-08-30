@@ -12,7 +12,7 @@ const Details = () => {
   const userContext = useContext(UserContext);
 
   const { lives, film, handleDecrementLives } = gameContext;
-  const { user } = userContext;
+  const { user, setUserLives } = userContext;
 
   useEffect(() => {
     if (lives < 5) {
@@ -22,8 +22,13 @@ const Details = () => {
 
   const handleToggleHint = () => {
     if (!hasUsedHint) {
-      handleDecrementLives();
-      setHasUsedHint(true);
+      if (!user) return;
+
+      if (!user.hintUsedToday) {
+        setUserLives(user.lives - 1, true);
+        handleDecrementLives();
+        setHasUsedHint(true);
+      }
     }
 
     setToggleHint(!toggleHint);
