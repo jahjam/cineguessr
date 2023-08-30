@@ -37,7 +37,7 @@ const EndStateModal = ({ handleToggleDetailsModal }: Props) => {
       break;
     default:
       endState = <div>
-        <h2>Thanks for playing!</h2>
+        <h2>Thanks for playing today!</h2>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis illo
           hic deserunt magnam quisquam natus sapiente est cumque alias nisi.
