@@ -13,6 +13,7 @@ const DetailsModal = ({ handleToggleDetailsModal }: Props) => {
         <h3>How to play</h3>
 
         {/* TODO Add example SVG */}
+        {/* @ts-ignore */}
         <ArtCard />
 
         <span>Guess the film in 5 takes.</span>
