@@ -11,9 +11,11 @@ const EndStateModal = ({ handleToggleDetailsModal }: Props) => {
   const alertContext = useContext(AlertContext);
   const { alert } = alertContext;
 
-  const endState =
-    alert === 'win' ? (
-      <div>
+  let endState;
+
+  switch (alert) {
+    case 'win':
+      endState = <div>
         <h2>Correct!</h2>
         <p>
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error, cum
@@ -21,20 +23,31 @@ const EndStateModal = ({ handleToggleDetailsModal }: Props) => {
           deleniti id possimus natus aliquid facere similique eius expedita
           fugiat molestiae sit assumenda.
         </p>
-      </div>
-    ) : (
-      <div>
+      </div>;
+      break;
+    case 'lose':
+      endState = <div>
         <h2>Too bad!</h2>
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis illo
           hic deserunt magnam quisquam natus sapiente est cumque alias nisi.
           Saepe magni atque pariatur ullam cumque quae magnam eos eum.
         </p>
-      </div>
-    );
+      </div>;
+      break;
+    default:
+      endState = <div>
+        <h2>Thanks for playing!</h2>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis illo
+          hic deserunt magnam quisquam natus sapiente est cumque alias nisi.
+          Saepe magni atque pariatur ullam cumque quae magnam eos eum.
+        </p>
+      </div>;
+  }
 
   return (
-    <Modal handleToggleDetailsModal={handleToggleDetailsModal}>
+    <Modal isEndState={true} handleToggleDetailsModal={handleToggleDetailsModal}>
       <Styled.EndStateModal>{endState}</Styled.EndStateModal>
     </Modal>
   );
