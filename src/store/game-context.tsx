@@ -65,7 +65,8 @@ export const GameContextProvider = ({ children }: Props) => {
     setUserCorrectLetters,
     setUserHasWon,
     setUserStreak,
-    breakUserStreak
+    breakUserStreak,
+    resetUserOnNewGame
   } = userContext;
 
   const filmRef = useRef<Film>({ title: '', cards: [], hint: '' });
@@ -133,13 +134,13 @@ export const GameContextProvider = ({ children }: Props) => {
         setCorrectLetters([...user.curCorrectLetters.split('')]);
       } else {
         setCorrectLetters(prevState => {
-          user && setUserCorrectLetters([
-            ...[...new Set([...prevState, ...currCorrectLetters])]
-          ].join(''));
-
-          return [
+          const newCurrentLetters_a = [
             ...[...new Set([...prevState, ...currCorrectLetters])]
           ];
+
+          user && setUserCorrectLetters(newCurrentLetters_a.join(''));
+
+          return newCurrentLetters_a;
         });
       }
     }
@@ -221,6 +222,8 @@ export const GameContextProvider = ({ children }: Props) => {
           console.log('Something went wrong!');
           return;
         }
+
+        resetUserOnNewGame();
 
         setFilm(gameData[randomGameIndex]);
       }

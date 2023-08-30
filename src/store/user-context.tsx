@@ -24,16 +24,25 @@ export type ContextDefaults = {
   setUserHasWon: Function;
   setUserStreak: Function;
   breakUserStreak: Function;
+  resetUserOnNewGame: Function;
 };
 
 const contextDefaults = {
   user: undefined,
-  setUserHasPlayedToday: async () => {},
-  setUserLives: async (curLives: number) => {},
-  setUserCorrectLetters: async (correctLetters: string) => {},
-  setUserHasWon: async () => {},
-  setUserStreak: async () => {},
-  breakUserStreak: async () => {},
+  setUserHasPlayedToday: async () => {
+  },
+  setUserLives: async (curLives: number) => {
+  },
+  setUserCorrectLetters: async (correctLetters: string) => {
+  },
+  setUserHasWon: async () => {
+  },
+  setUserStreak: async () => {
+  },
+  breakUserStreak: async () => {
+  },
+  resetUserOnNewGame: async () => {
+  }
 };
 
 export const UserContext =
@@ -56,7 +65,7 @@ export const UserContextProvider = ({ children }: Props) => {
       console.log(error);
       return;
     }
-  }
+  };
 
   const setUserLives = async (curLives: number) => {
     const { error } = await supabase.from('user').update({ lives: curLives }).eq('user_id', userRef.current?.id);
@@ -65,18 +74,18 @@ export const UserContextProvider = ({ children }: Props) => {
       console.log(error);
       return;
     }
-  }
+  };
 
-  const setUserCorrectLetters = async(correctLetters: string) => {
+  const setUserCorrectLetters = async (correctLetters: string) => {
     const { error } = await supabase.from('user').update({ cur_correct_letters: correctLetters }).eq('user_id', userRef.current?.id);
 
     if (error) {
       console.log(error);
       return;
     }
-  }
+  };
 
-  const setUserHasWon = async() => {
+  const setUserHasWon = async () => {
     if (!userRef.current) return;
 
     const { error } = await supabase.from('user').update({ games_won: userRef.current.gamesWon + 1 }).eq('user_id', userRef.current?.id);
@@ -85,29 +94,50 @@ export const UserContextProvider = ({ children }: Props) => {
       console.log(error);
       return;
     }
-  }
+  };
 
-  const setUserStreak = async() => {
+  const setUserStreak = async () => {
     if (!userRef.current) return;
 
-    const { error } = await supabase.from('user').update({ streak: userRef.current.streak + 1 }).eq('user_id', userRef.current?.id);
+    const { error } = await supabase.from('user').update({
+      streak: userRef.current.streak + 1,
+      is_on_streak: true
+    }).eq('user_id', userRef.current?.id);
 
     if (error) {
       console.log(error);
       return;
     }
-  }
+  };
 
-  const breakUserStreak = async() => {
+  const breakUserStreak = async () => {
     if (!userRef.current) return;
 
-    const { error } = await supabase.from('user').update({ streak: 0 }).eq('user_id', userRef.current?.id);
+    const { error } = await supabase.from('user').update({
+      streak: 0,
+      is_on_streak: false
+    }).eq('user_id', userRef.current?.id);
 
     if (error) {
       console.log(error);
       return;
     }
-  }
+  };
+
+  const resetUserOnNewGame = async () => {
+    if (!userRef.current) return;
+    const { error } = await supabase.from('user').update({
+      lives: 5,
+      has_played_today: false,
+      cur_current_letters: ''
+    }).eq('user_id', userRef.current?.id);
+
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+  };
 
   useEffect(() => {
     // Check local storage to see if user is new
@@ -183,7 +213,8 @@ export const UserContextProvider = ({ children }: Props) => {
     setUserCorrectLetters,
     setUserHasWon,
     setUserStreak,
-    breakUserStreak
+    breakUserStreak,
+    resetUserOnNewGame
   };
 
   return (
