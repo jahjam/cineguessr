@@ -50,7 +50,7 @@ const Details = () => {
           <span>Winning Streak: {user?.streak}</span>
           <span>Average Tries: 3.4</span>
           <span>Least Takes: {user?.leastTakes}</span>
-          <span>Average Guess Time: 2m 53s</span>
+          <span>Average Guess Time: {user?.averageGuessTime}</span>
         </Styled.DataFront>
         <Styled.DataBack
           initial={{ rotateX: -180 }}
