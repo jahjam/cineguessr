@@ -26,6 +26,8 @@ const App = () => {
   const { endGame } = alertContext;
 
   const handleToggleDetailsModal = () => {
+    if (endGame) return;
+
     setToggleDetailsModal(!toggleDetailsModal);
   };
 
