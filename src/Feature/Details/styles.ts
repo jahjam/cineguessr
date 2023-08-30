@@ -24,7 +24,7 @@ export const Hint = styled.h2`
 
 export const Data = styled.div`
   width: 100%;
-  height: 8rem;
+  height: 10rem;
 
   perspective: 150rem;
 
