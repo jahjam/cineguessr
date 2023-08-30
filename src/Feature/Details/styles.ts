@@ -178,3 +178,8 @@ export const ClapperboardIcon = styled.div<Props>`
           `};
   }
 `;
+
+export const GuessTime = styled.span`
+  display: flex;
+  flex-direction: column;
+`

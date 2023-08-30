@@ -48,9 +48,9 @@ const Details = () => {
           gap={0.1}
         >
           <span>Winning Streak: {user?.streak}</span>
-          <span>Average Tries: 3.4</span>
+          <span>Average Takes: 3.4</span>
           <span>Least Takes: {user?.leastTakes}</span>
-          <span>Average Guess Time: {user?.averageGuessTime}</span>
+          <Styled.GuessTime>Average Guess Time: <span>{user?.averageGuessTime}</span></Styled.GuessTime>
         </Styled.DataFront>
         <Styled.DataBack
           initial={{ rotateX: -180 }}
