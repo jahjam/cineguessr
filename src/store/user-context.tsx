@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { format } from 'date-fns';
+import { formatDistance } from 'date-fns/fp';
 
 export interface User {
   averageGuessTime: number;
@@ -17,6 +18,7 @@ export interface User {
   hasStartedToday: boolean;
   lastPlayed: string;
   hintUsedToday: boolean;
+  timeStartedToday: Date;
 }
 
 export type ContextDefaults = {
@@ -62,9 +64,12 @@ export const UserContextProvider = ({ children }: Props) => {
 
   // TODO handle all supabase errors!
   const setUserHasPlayedToday = async () => {
+    if (!userRef.current) return;
+
     const { error } = await supabase.from('user').update({
       has_played_today: true,
-      has_started_today: false
+      has_started_today: false,
+      average_guess_time: formatDistance(new Date(userRef.current?.timeStartedToday), new Date()),
     }).eq('user_id', userRef.current?.id);
 
     if (error) {
@@ -221,7 +226,8 @@ export const UserContextProvider = ({ children }: Props) => {
           average_guess_time: averageGuessTime,
           average_takes: averageTakes,
           last_played: lastPlayed,
-          hint_used_today: hintUsedToday
+          hint_used_today: hintUsedToday,
+          time_started_today: timeStartedToday,
         } = data[0];
 
         setUser({
@@ -238,7 +244,8 @@ export const UserContextProvider = ({ children }: Props) => {
           averageGuessTime,
           averageTakes,
           lastPlayed,
-          hintUsedToday
+          hintUsedToday,
+          timeStartedToday
         });
       };
 

@@ -237,9 +237,9 @@ export const GameContextProvider = ({ children }: Props) => {
     }
 
     if (user?.hasPlayedToday) {
-      // TODO change to a hasPlayedToday alert
-      handleSetAlert('win');
+      handleSetAlert('hasPlayedToday');
       handleSetEndGame(true);
+      setLives(user.lives);
       return;
     }
 
