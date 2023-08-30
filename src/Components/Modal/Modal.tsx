@@ -3,10 +3,11 @@ import * as Styled from './styles';
 
 type Props = {
   handleToggleDetailsModal: () => void;
+  isEndState?: boolean;
   children: ReactNode;
 };
 
-const Modal = ({ handleToggleDetailsModal, children }: Props) => {
+const Modal = ({ handleToggleDetailsModal, children, isEndState = false }: Props) => {
   const handleCloseModal = (e: React.MouseEvent) => {
     const modalEl = document.getElementById('modal');
     const closeIcon = document.getElementById('close-icon');
@@ -24,7 +25,7 @@ const Modal = ({ handleToggleDetailsModal, children }: Props) => {
       onClick={handleCloseModal}
     >
       <Styled.Container direction="column" justify="flex-start">
-        <Styled.CloseIcon id="close-icon" />
+        {!isEndState && <Styled.CloseIcon id='close-icon' />}
         {children}
       </Styled.Container>
     </Styled.Modal>
