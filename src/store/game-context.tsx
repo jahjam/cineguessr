@@ -148,8 +148,18 @@ export const GameContextProvider = ({ children }: Props) => {
           char => film.title.toLowerCase().includes(char) && char !== ' '
         );
 
-      if (!currCorrectLetters.length && user) {
-        setCorrectLetters([...user.curCorrectLetters.split('')]);
+      if (!user) return;
+
+      console.log(currCorrectLetters, user.curCorrectLetters);
+
+      if (!currCorrectLetters.length) {
+        setCorrectLetters(prevState => {
+          if (prevState) {
+            return [...prevState];
+          }
+
+          return [...user.curCorrectLetters.split('')]
+        });
       } else {
         setCorrectLetters(prevState => {
           const newCurrentLetters_a = [
