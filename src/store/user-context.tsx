@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { format } from 'date-fns';
 import { formatDistance } from 'date-fns/fp';
+import { Game } from './game-context';
 
 export interface User {
   averageGuessTime: number;
@@ -30,6 +31,9 @@ export type ContextDefaults = {
   setUserStreak: Function;
   breakUserStreak: Function;
   resetUserOnNewGame: Function;
+  setAvTakes: Function;
+  setLeastTakes: Function;
+  setUserGuessForToday: Function;
 };
 
 const contextDefaults = {
@@ -47,6 +51,12 @@ const contextDefaults = {
   breakUserStreak: async () => {
   },
   resetUserOnNewGame: async () => {
+  },
+  setAvTakes: async () => {
+  },
+  setLeastTakes: async () => {
+  },
+  setUserGuessForToday: async () => {
   }
 };
 
@@ -63,17 +73,25 @@ export const UserContextProvider = ({ children }: Props) => {
   userRef.current = user;
 
   // TODO handle all supabase errors!
-  const setUserHasPlayedToday = async () => {
+  const setUserHasPlayedToday = async (game: Game) => {
     if (!userRef.current) return;
 
-    const { error } = await supabase.from('user').update({
+    const { data: userData, error: userError } = await supabase.from('user').update({
       has_played_today: true,
       has_started_today: false,
-      average_guess_time: formatDistance(new Date(userRef.current?.timeStartedToday), new Date()),
-    }).eq('user_id', userRef.current?.id);
+      average_guess_time: formatDistance(new Date(userRef.current?.timeStartedToday), new Date())
+    }).eq('user_id', userRef.current?.id).select();
 
-    if (error) {
-      console.log(error);
+    if (!userData) return;
+
+    const { error: numTakesError } = await supabase.from('num_takes').insert({
+      user_id: userRef.current?.id,
+      game_id: game.gameId,
+      num_takes: 5 - userData[0].lives
+    });
+
+    if (userError || numTakesError) {
+      console.log('Something went wrong!');
       return;
     }
   };
@@ -124,6 +142,92 @@ export const UserContextProvider = ({ children }: Props) => {
     }
   };
 
+  const setLeastTakes = async (leastTakes: number) => {
+    if (!userRef.current) return;
+
+    const { error } = await supabase.from('user').update({
+      least_takes: leastTakes
+    }).eq('user_id', userRef.current?.id);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+  };
+
+  const setAvTakes = async (avTakes: number) => {
+    if (!userRef.current) return;
+
+    const { error } = await supabase.from('user').update({
+      average_takes: avTakes
+    }).eq('user_id', userRef.current?.id);
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+  };
+
+  const setUserGuessForToday = async (guess: string, lives: number, game: Game) => {
+    if (!userRef.current) return;
+
+    let curGuess: string | null;
+
+    console.log(lives);
+
+    switch (lives) {
+      case 5:
+        curGuess = 'guess_one';
+        break;
+      case 4:
+        curGuess = 'guess_two';
+        break;
+      case 3:
+        curGuess = 'guess_three';
+        break;
+      case 2:
+        curGuess = 'guess_four';
+        break;
+      case 1:
+        curGuess = 'guess_five';
+        break;
+      default:
+        curGuess = null;
+        break;
+    }
+
+    if (!curGuess) return;
+
+    console.log(curGuess);
+
+
+    if (curGuess === 'guess_one') {
+      const { error } = await supabase.from('guess').insert({
+        [curGuess]: guess,
+        user_id: userRef.current?.id,
+        game_id: game.gameId
+      });
+
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+    } else {
+      console.log(game);
+      const { data, error } = await supabase.from('guess').update({
+        [curGuess]: guess
+      }).eq('game_id', game.gameId).select();
+
+      console.log(data);
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+    }
+  };
+
   const breakUserStreak = async () => {
     if (!userRef.current) return;
 
@@ -155,8 +259,6 @@ export const UserContextProvider = ({ children }: Props) => {
       console.log(error);
       return;
     }
-
-    console.log(data);
 
     const {
       cur_correct_letters: curCorrectLetters,
@@ -192,7 +294,6 @@ export const UserContextProvider = ({ children }: Props) => {
         const { data, error } = await supabase.from('user').insert({ created_at: new Date() }).select();
 
         if (!data || error) {
-          // TODO HANDLE ERROR STATE
           console.log(error?.message);
           return;
         }
@@ -227,7 +328,7 @@ export const UserContextProvider = ({ children }: Props) => {
           average_takes: averageTakes,
           last_played: lastPlayed,
           hint_used_today: hintUsedToday,
-          time_started_today: timeStartedToday,
+          time_started_today: timeStartedToday
         } = data[0];
 
         setUser({
@@ -261,7 +362,10 @@ export const UserContextProvider = ({ children }: Props) => {
     setUserHasWon,
     setUserStreak,
     breakUserStreak,
-    resetUserOnNewGame
+    resetUserOnNewGame,
+    setAvTakes,
+    setLeastTakes,
+    setUserGuessForToday
   };
 
   return (
