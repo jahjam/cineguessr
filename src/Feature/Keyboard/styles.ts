@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { ReactComponent as ReturnIconSVG } from '../../assets/keys/return.svg';
-import { ReactComponent as BackspaceIconSVG } from '../../assets/keys/Backspace.svg';
+import { ReactComponent as BackspaceIconSVG } from '../../assets/keys/backspace.svg';
 import { flex, flashKF, flashSpacebarKF } from '../../styled-utils/mixins';
 
 interface Props {
