@@ -236,13 +236,14 @@ export const UserContextProvider = ({ children }: Props) => {
   };
 
   const resetUserOnNewGame = async () => {
+    console.log("reset");
     if (!userRef.current) return;
     const { data, error } = await supabase.from('user').update({
       lives: 5,
       has_played_today: false,
       cur_correct_letters: '',
       has_started_today: true,
-      time_started_today: new Date(),
+      time_started_today: new Date(Date.now()),
       hint_used_today: false,
       last_played: format(new Date(), 'dd-MM-yyyy')
     }).eq('user_id', userRef.current?.id).select();
@@ -259,7 +260,8 @@ export const UserContextProvider = ({ children }: Props) => {
       lives,
       has_started_today: hasStartedToday,
       last_played: lastPlayed,
-      hint_used_today, hintUsedToday
+      hint_used_today: hintUsedToday,
+      time_started_today: timeStartedToday,
     } = data[0];
 
     setUser(prevState => {
@@ -270,7 +272,8 @@ export const UserContextProvider = ({ children }: Props) => {
         lives,
         hasStartedToday,
         lastPlayed,
-        hintUsedToday
+        hintUsedToday,
+        timeStartedToday
       } as User;
     });
   };
