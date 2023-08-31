@@ -35,7 +35,9 @@ const Details = () => {
         return acc + take.num_takes;
       }, 0) / data?.length).toFixed(1);
 
-      const calcLeastTakes = Math.min(...data.map(take => take.num_takes))
+      let calcLeastTakes = Math.min(...data.map(take => take.num_takes));
+
+      if (calcLeastTakes === Infinity) calcLeastTakes = 0;
 
       setAvTakes(calcAvTakes);
       setLeastTakes(calcLeastTakes);
@@ -74,9 +76,9 @@ const Details = () => {
           gap={0.1}
         >
           <span>Winning Streak: {user?.streak}</span>
-          <span>Average Takes: {avTakes}</span>
+          <span>Average Takes: {avTakes || 0}</span>
           <span>Least Takes: {leastTakes}</span>
-          <Styled.GuessTime>Average Guess Time: <span>{user?.averageGuessTime}</span></Styled.GuessTime>
+          <Styled.GuessTime>Average Guess Time: <span>{user?.averageGuessTime || "..."}</span></Styled.GuessTime>
         </Styled.DataFront>
         <Styled.DataBack
           initial={{ rotateX: -180 }}
