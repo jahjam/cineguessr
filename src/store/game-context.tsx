@@ -13,6 +13,14 @@ type Card = {
 
 export type Film = { title: string; cards: Array<Card>; hint: string };
 
+export type Game = {
+  gameId: number,
+  createdAt: Date,
+  film: string,
+  currentDay: string,
+  index: number
+}
+
 export type ContextDefaults = {
   film: Film;
   lives: number;
@@ -53,6 +61,7 @@ export const GameContextProvider = ({ children }: Props) => {
   const todaysDate = format(new Date(), 'dd-MM-yyyy');
 
   const [film, setFilm] = useState<Film>({ title: '', cards: [], hint: '' });
+  const [game, setGame] = useState<Game>();
   const [lives, setLives] = useState<number>(5);
   const [endState, setEndState] = useState(false);
   const [guess, setGuess] = useState('');
@@ -67,22 +76,33 @@ export const GameContextProvider = ({ children }: Props) => {
     setUserHasWon,
     setUserStreak,
     breakUserStreak,
-    resetUserOnNewGame
+    resetUserOnNewGame,
+    setUserGuessForToday
   } = userContext;
 
   const filmRef = useRef<Film>({ title: '', cards: [], hint: '' });
   const userRef = useRef<User>();
+  const gameRef = useRef<Game>();
+  const livesRef = useRef<number>();
 
   filmRef.current = film;
   userRef.current = user;
+  gameRef.current = game;
+  livesRef.current = lives;
 
   const handleSetGuess = async (newGuess: string) => {
+    if (userRef.current?.hasPlayedToday) {
+      console.log("You've already played today, please come back tomorrow!");
+      return;
+    }
+
     // YOU WIN!
     if (newGuess.toLowerCase() === filmRef.current.title.toLowerCase()) {
       handleSetAlert('win');
       handleSetEndGame(true);
 
-      setUserHasPlayedToday();
+      setUserGuessForToday(newGuess.toLowerCase(), livesRef.current, gameRef.current);
+      setUserHasPlayedToday(gameRef.current);
       setUserHasWon();
       setUserStreak();
 
@@ -90,6 +110,7 @@ export const GameContextProvider = ({ children }: Props) => {
     }
 
     // WRONG GUESS!
+    setUserGuessForToday(newGuess.toLowerCase(), livesRef.current, gameRef.current);
     setLives(prevState => {
       setUserLives(prevState - 1);
       return prevState - 1;
@@ -118,7 +139,7 @@ export const GameContextProvider = ({ children }: Props) => {
       handleSetEndGame(true);
       setEndState(true);
 
-      setUserHasPlayedToday();
+      setUserHasPlayedToday(gameRef.current);
       breakUserStreak();
     } else {
       const currCorrectLetters = guess
@@ -156,6 +177,14 @@ export const GameContextProvider = ({ children }: Props) => {
 
       // the game for this day has already been created, and we can get id to load in the game
       if (data.length) {
+        const { id: gameId, created_at: createdAt, film, current_day: currentDay, index } = data[0];
+        setGame({
+          gameId,
+          createdAt,
+          film,
+          currentDay,
+          index
+        });
         setFilm(gameData[data[0].index]);
       }
       // else it hasn't, and we must create it and then set the id for the game
@@ -209,16 +238,25 @@ export const GameContextProvider = ({ children }: Props) => {
 
         if (!data) return;
 
-        const { error: updateError } = await supabase.from('game').update({
+        const { data: gameDataDb, error: updateError } = await supabase.from('game').update({
           film: selectedGame.title.replaceAll(' ', '-').toLowerCase(),
           index: randomGameIndex
-        }).eq('id', data[0]?.id);
+        }).eq('id', data[0]?.id).select();
 
         if (updateError) {
           console.log('Something went wrong!');
           return;
         }
 
+        const { id: gameId, created_at: createdAt, film, current_day: currentDay, index } = gameDataDb[0];
+
+        setGame({
+          gameId,
+          createdAt,
+          film,
+          currentDay,
+          index
+        });
         setFilm(gameData[randomGameIndex]);
       }
     };
