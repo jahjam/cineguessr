@@ -79,7 +79,7 @@ export const UserContextProvider = ({ children }: Props) => {
     const { data: userData, error: userError } = await supabase.from('user').update({
       has_played_today: true,
       has_started_today: false,
-      average_guess_time: formatDistance(new Date(userRef.current?.timeStartedToday), new Date())
+      average_guess_time: formatDistance(new Date(userRef.current?.timeStartedToday), Date.now())
     }).eq('user_id', userRef.current?.id).select();
 
     if (!userData) return;
