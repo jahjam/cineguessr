@@ -79,7 +79,7 @@ export const UserContextProvider = ({ children }: Props) => {
     const { data: userData, error: userError } = await supabase.from('user').update({
       has_played_today: true,
       has_started_today: false,
-      average_guess_time: formatDistance(new Date(userRef.current?.timeStartedToday), Date.now())
+      average_guess_time: formatDistance(new Date(userRef.current?.timeStartedToday), new Date(Date.now()))
     }).eq('user_id', userRef.current?.id).select();
 
     if (!userData) return;
@@ -109,6 +109,7 @@ export const UserContextProvider = ({ children }: Props) => {
   };
 
   const setUserCorrectLetters = async (correctLetters: string) => {
+    console.log(correctLetters);
     const { error } = await supabase.from('user').update({ cur_correct_letters: correctLetters }).eq('user_id', userRef.current?.id);
 
     if (error) {
@@ -211,7 +212,7 @@ export const UserContextProvider = ({ children }: Props) => {
     } else {
       const { data, error } = await supabase.from('guess').update({
         [curGuess]: guess
-      }).eq('game_id', game.gameId).select();
+      }).eq('game_id', game.gameId).eq("user_id", userRef.current?.id).select();
 
       if (error) {
         console.log(error);
