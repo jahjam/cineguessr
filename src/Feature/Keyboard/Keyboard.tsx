@@ -5,7 +5,6 @@ import Key from '../../Components/Key/Key';
 import InputContext from '../../store/input-context';
 import { useContext, useEffect, useRef, useState } from 'react';
 import KeyDownContext from '../../store/key-down-context';
-import GameContext from '../../store/game-context';
 
 const KEYS = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
