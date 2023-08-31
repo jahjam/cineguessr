@@ -214,12 +214,9 @@ export const UserContextProvider = ({ children }: Props) => {
         return;
       }
     } else {
-      console.log(game);
       const { data, error } = await supabase.from('guess').update({
         [curGuess]: guess
       }).eq('game_id', game.gameId).select();
-
-      console.log(data);
 
       if (error) {
         console.log(error);
