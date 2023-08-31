@@ -18,10 +18,8 @@ const EndStateModal = ({ handleToggleDetailsModal }: Props) => {
       endState = <div>
         <h2>Correct!</h2>
         <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Error, cum
-          veniam! Numquam nostrum voluptate, nulla consequatur, blanditiis,
-          deleniti id possimus natus aliquid facere similique eius expedita
-          fugiat molestiae sit assumenda.
+          Congratulations, you guessed right! Tomorrow there will be a new film to guess, so be sure to return to have a
+          crack at that one!
         </p>
       </div>;
       break;
@@ -29,9 +27,8 @@ const EndStateModal = ({ handleToggleDetailsModal }: Props) => {
       endState = <div>
         <h2>Too bad!</h2>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis illo
-          hic deserunt magnam quisquam natus sapiente est cumque alias nisi.
-          Saepe magni atque pariatur ullam cumque quae magnam eos eum.
+          Commiserations, you couldn't guess it correctly this time! Don't worry though, as tomorrow there will be a new
+          film to guess, so be sure to return to have a crack at that one!
         </p>
       </div>;
       break;
@@ -39,9 +36,8 @@ const EndStateModal = ({ handleToggleDetailsModal }: Props) => {
       endState = <div>
         <h2>Thanks for playing today!</h2>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis illo
-          hic deserunt magnam quisquam natus sapiente est cumque alias nisi.
-          Saepe magni atque pariatur ullam cumque quae magnam eos eum.
+          Tomorrow there will be a new film to guess, so be sure to return to have a
+          crack at that one!
         </p>
       </div>;
   }
