@@ -21,6 +21,10 @@ const EndStateModal = ({ handleToggleDetailsModal }: Props) => {
           Congratulations, you guessed right! Tomorrow there will be a new film to guess, so be sure to return to have a
           crack at that one!
         </p>
+        <p>
+          Your stats will be accumulated over time, however, they are browser specific, so if you change browsers your
+          stats won't carry over.
+        </p>
       </div>;
       break;
     case 'lose':
@@ -30,6 +34,10 @@ const EndStateModal = ({ handleToggleDetailsModal }: Props) => {
           Commiserations, you couldn't guess it correctly this time! Don't worry though, as tomorrow there will be a new
           film to guess, so be sure to return to have a crack at that one!
         </p>
+        <p>
+          Your stats will be accumulated over time, however, they are browser specific, so if you change browsers your
+          stats won't carry over.
+        </p>
       </div>;
       break;
     default:
@@ -38,6 +46,10 @@ const EndStateModal = ({ handleToggleDetailsModal }: Props) => {
         <p>
           Tomorrow there will be a new film to guess, so be sure to return to have a
           crack at that one!
+        </p>
+        <p>
+          Your stats will be accumulated over time, however, they are browser specific, so if you change browsers your
+          stats won't carry over.
         </p>
       </div>;
   }
