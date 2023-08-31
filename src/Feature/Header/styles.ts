@@ -41,6 +41,11 @@ export const SettingsIcon = styled(SettingsIconSVG)`
   }
 `;
 
+export const PlaceHolderIcon = styled.div`
+  height: 3.2rem;
+  width: 3.2rem;
+`
+
 export const HeaderContainer = styled.div`
   ${flex}
 `;
