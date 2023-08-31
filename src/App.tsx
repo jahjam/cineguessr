@@ -12,6 +12,7 @@ import DetailsModal from './Feature/DetailsModal/DetailsModal';
 import { AnimatePresence } from 'framer-motion';
 import { AlertContext } from './store/alert-context';
 import EndStateModal from './Feature/EndStateModal/EndStateModal';
+import UserContext from './store/user-context';
 
 const AppContainer = styled.div`
   ${flex}
@@ -20,10 +21,12 @@ const AppContainer = styled.div`
 const App = () => {
   const gameContext = useContext(GameContext);
   const alertContext = useContext(AlertContext);
+  const userContext = useContext(UserContext);
   const [toggleDetailsModal, setToggleDetailsModal] = useState(false);
 
   const { correctLetters } = gameContext;
   const { endGame } = alertContext;
+  const { user } = userContext;
 
   const handleToggleDetailsModal = () => {
     if (endGame) return;
@@ -44,11 +47,14 @@ const App = () => {
         )}
       </AnimatePresence>
       <Header handleToggleDetailsModal={handleToggleDetailsModal} />
-      <Details />
-      <Cards />
-      {correctLetters.length !== 0 && <Pool />}
-      <Input />
-      <Keyboard />
+      {user ?
+        <>
+          <Details />
+          <Cards />
+          {correctLetters.length !== 0 && <Pool />}
+          <Input />
+          <Keyboard />
+        </> : <span>Loading...</span>}
     </AppContainer>
   );
 };
