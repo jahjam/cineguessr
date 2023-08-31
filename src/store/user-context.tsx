@@ -173,8 +173,6 @@ export const UserContextProvider = ({ children }: Props) => {
 
     let curGuess: string | null;
 
-    console.log(lives);
-
     switch (lives) {
       case 5:
         curGuess = 'guess_one';
@@ -197,9 +195,6 @@ export const UserContextProvider = ({ children }: Props) => {
     }
 
     if (!curGuess) return;
-
-    console.log(curGuess);
-
 
     if (curGuess === 'guess_one') {
       const { error } = await supabase.from('guess').insert({
@@ -296,10 +291,44 @@ export const UserContextProvider = ({ children }: Props) => {
         }
 
         localStorage.setItem('userId', data[0].user_id);
+        const {
+          user_id: uid,
+          created_at: createdAt,
+          cur_correct_letters: curCorrectLetters,
+          games_won: gamesWon,
+          has_played_today: hasPlayedToday,
+          is_on_streak: isOnStreak,
+          least_takes: leastTakes,
+          lives,
+          streak,
+          has_started_today: hasStartedToday,
+          average_guess_time: averageGuessTime,
+          average_takes: averageTakes,
+          last_played: lastPlayed,
+          hint_used_today: hintUsedToday,
+          time_started_today: timeStartedToday
+        } = data[0];
+
+        setUser({
+          id: uid,
+          createdAt,
+          curCorrectLetters,
+          gamesWon,
+          hasPlayedToday,
+          isOnStreak,
+          leastTakes,
+          lives,
+          streak,
+          hasStartedToday,
+          averageGuessTime,
+          averageTakes,
+          lastPlayed,
+          hintUsedToday,
+          timeStartedToday
+        });
       };
 
       createUser();
-
     } // if user has id saved in local storage, find user in database and load in
     else {
       const fetchUser = async () => {
