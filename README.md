@@ -1,5 +1,7 @@
 # CineGuessr 🎬
 
+#### ⚠️ Please note: CineGuessr only has one test film currently due to waiting for artist to draw custom cards 
+
 A guessing game, where, based on hand-illustrated cards which appear on a daily basis, the player must guess the film
 correctly before their lives run out.
 
