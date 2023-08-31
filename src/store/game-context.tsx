@@ -150,8 +150,6 @@ export const GameContextProvider = ({ children }: Props) => {
 
       if (!user) return;
 
-      console.log(currCorrectLetters, user.curCorrectLetters);
-
       if (!currCorrectLetters.length) {
         setCorrectLetters(prevState => {
           if (prevState) {
