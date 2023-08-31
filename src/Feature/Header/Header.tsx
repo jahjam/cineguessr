@@ -1,6 +1,7 @@
 import * as Styled from './styles';
 import { LAUNCH_DATE } from '../../config';
 import { formatDistanceToNowStrict } from 'date-fns';
+import { PlaceHolderIcon } from './styles';
 
 type Props = {
   handleToggleDetailsModal: () => void;
@@ -22,7 +23,7 @@ const Header = ({ handleToggleDetailsModal }: Props) => {
         <Styled.Title>CineGuessr</Styled.Title>
         <Styled.SubTitle>Day {numberOfDaysSinceLaunch}</Styled.SubTitle>
       </Styled.HeaderContainer>
-      <Styled.SettingsIcon tabIndex={0} />
+      <Styled.PlaceHolderIcon  />
     </Styled.Header>
   );
 };
