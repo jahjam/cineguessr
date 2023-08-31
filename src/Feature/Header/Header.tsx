@@ -1,7 +1,6 @@
 import * as Styled from './styles';
 import { LAUNCH_DATE } from '../../config';
 import { formatDistanceToNowStrict } from 'date-fns';
-import { PlaceHolderIcon } from './styles';
 
 type Props = {
   handleToggleDetailsModal: () => void;
