@@ -156,7 +156,9 @@ export const GameContextProvider = ({ children }: Props) => {
             return [...prevState];
           }
 
-          return [...user.curCorrectLetters.split('')]
+          if (!user.hasPlayedToday) return [...user.curCorrectLetters.split('')];
+
+          return [];
         });
       } else {
         setCorrectLetters(prevState => {
