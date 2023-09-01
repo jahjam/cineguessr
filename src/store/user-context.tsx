@@ -97,10 +97,20 @@ export const UserContextProvider = ({ children }: Props) => {
   };
 
   const setUserLives = async (curLives: number, isHint: boolean = false) => {
-    const { error } = await supabase.from('user').update({
-      lives: curLives,
-      hint_used_today: isHint
-    }).eq('user_id', userRef.current?.id);
+    let payload;
+
+    if (isHint) {
+      payload = {
+        lives: curLives,
+        hint_used_today: isHint
+      };
+    } else {
+      payload = {
+        lives: curLives
+      };
+    }
+
+    const { error } = await supabase.from('user').update(payload).eq('user_id', userRef.current?.id);
 
     if (error) {
       console.log(error);
@@ -212,7 +222,7 @@ export const UserContextProvider = ({ children }: Props) => {
     } else {
       const { data, error } = await supabase.from('guess').update({
         [curGuess]: guess
-      }).eq('game_id', game.gameId).eq("user_id", userRef.current?.id).select();
+      }).eq('game_id', game.gameId).eq('user_id', userRef.current?.id).select();
 
       if (error) {
         console.log(error);
@@ -236,7 +246,7 @@ export const UserContextProvider = ({ children }: Props) => {
   };
 
   const resetUserOnNewGame = async () => {
-    console.log("reset");
+    console.log('reset');
     if (!userRef.current) return;
     const { data, error } = await supabase.from('user').update({
       lives: 5,
@@ -261,7 +271,7 @@ export const UserContextProvider = ({ children }: Props) => {
       has_started_today: hasStartedToday,
       last_played: lastPlayed,
       hint_used_today: hintUsedToday,
-      time_started_today: timeStartedToday,
+      time_started_today: timeStartedToday
     } = data[0];
 
     setUser(prevState => {
