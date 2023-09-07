@@ -14,12 +14,12 @@ type Card = {
 export type Film = { title: string; cards: Array<Card>; hint: string };
 
 export type Game = {
-  gameId: number,
-  createdAt: Date,
-  film: string,
-  currentDay: string,
-  index: number
-}
+  gameId: number;
+  createdAt: Date;
+  film: string;
+  currentDay: string;
+  index: number;
+};
 
 export type ContextDefaults = {
   film: Film;
@@ -39,14 +39,10 @@ const contextDefaults = {
   guess: '',
   correctLetters: [],
   endState: false,
-  handleSetGuess: (guess: string) => {
-  },
-  handleSetFilm: (film: string) => {
-  },
-  handleDecrementLives: (lives: number) => {
-  },
-  handleSetEndState: (endState: boolean) => {
-  }
+  handleSetGuess: (guess: string) => {},
+  handleSetFilm: (film: string) => {},
+  handleDecrementLives: (lives: number) => {},
+  handleSetEndState: (endState: boolean) => {},
 };
 
 const GameContext = React.createContext<ContextDefaults>(contextDefaults);
@@ -77,7 +73,7 @@ export const GameContextProvider = ({ children }: Props) => {
     setUserStreak,
     breakUserStreak,
     resetUserOnNewGame,
-    setUserGuessForToday
+    setUserGuessForToday,
   } = userContext;
 
   const filmRef = useRef<Film>({ title: '', cards: [], hint: '' });
@@ -101,7 +97,11 @@ export const GameContextProvider = ({ children }: Props) => {
       handleSetAlert('win');
       handleSetEndGame(true);
 
-      setUserGuessForToday(newGuess.toLowerCase(), livesRef.current, gameRef.current);
+      setUserGuessForToday(
+        newGuess.toLowerCase(),
+        livesRef.current,
+        gameRef.current,
+      );
       setUserHasPlayedToday(gameRef.current);
       setUserHasWon();
       setUserStreak();
@@ -110,7 +110,11 @@ export const GameContextProvider = ({ children }: Props) => {
     }
 
     // WRONG GUESS!
-    setUserGuessForToday(newGuess.toLowerCase(), livesRef.current, gameRef.current);
+    setUserGuessForToday(
+      newGuess.toLowerCase(),
+      livesRef.current,
+      gameRef.current,
+    );
     setLives(prevState => {
       setUserLives(prevState - 1);
       return prevState - 1;
@@ -145,7 +149,7 @@ export const GameContextProvider = ({ children }: Props) => {
       const currCorrectLetters = guess
         .split('')
         .filter(
-          char => film.title.toLowerCase().includes(char) && char !== ' '
+          char => film.title.toLowerCase().includes(char) && char !== ' ',
         );
 
       if (!user) return;
@@ -155,15 +159,16 @@ export const GameContextProvider = ({ children }: Props) => {
           if (prevState.length) {
             return [...prevState];
           }
-
-          if (!user.hasPlayedToday) return [...user.curCorrectLetters.split('')];
+          console.log(user);
+          if (!user.hasPlayedToday && todaysDate === user.lastPlayed)
+            return [...user.curCorrectLetters.split('')];
 
           return [];
         });
       } else {
         setCorrectLetters(prevState => {
           const newCurrentLetters_a = [
-            ...[...new Set([...prevState, ...currCorrectLetters])]
+            ...[...new Set([...prevState, ...currCorrectLetters])],
           ];
 
           user && setUserCorrectLetters(newCurrentLetters_a.join(''));
@@ -177,7 +182,10 @@ export const GameContextProvider = ({ children }: Props) => {
   // handle everything about loading the film
   useEffect(() => {
     const fetchFilmFromDB = async () => {
-      const { data, error } = await supabase.from('game').select().eq('current_day', todaysDate);
+      const { data, error } = await supabase
+        .from('game')
+        .select()
+        .eq('current_day', todaysDate);
 
       // TODO handle error
       if (error) {
@@ -187,13 +195,19 @@ export const GameContextProvider = ({ children }: Props) => {
 
       // the game for this day has already been created, and we can get id to load in the game
       if (data.length) {
-        const { id: gameId, created_at: createdAt, film, current_day: currentDay, index } = data[0];
+        const {
+          id: gameId,
+          created_at: createdAt,
+          film,
+          current_day: currentDay,
+          index,
+        } = data[0];
         setGame({
           gameId,
           createdAt,
           film,
           currentDay,
-          index
+          index,
         });
         setFilm(gameData[data[0].index]);
       }
@@ -203,10 +217,8 @@ export const GameContextProvider = ({ children }: Props) => {
         const generateUnusedRandomNumber = async (): Promise<number> => {
           let i = Math.floor(Math.random() * gameData.length);
 
-          const {
-            data: filmUsedIndexData,
-            error: selectfilmUsedIndexError
-          } = await supabase.from('films_used').select().eq('film_index', i);
+          const { data: filmUsedIndexData, error: selectfilmUsedIndexError } =
+            await supabase.from('films_used').select().eq('film_index', i);
 
           if (selectfilmUsedIndexError) {
             console.log(selectfilmUsedIndexError);
@@ -220,7 +232,8 @@ export const GameContextProvider = ({ children }: Props) => {
           return i;
         };
 
-        const { data: filmUsedData, error: selectfilmUsedError } = await supabase.from('films_used').select();
+        const { data: filmUsedData, error: selectfilmUsedError } =
+          await supabase.from('films_used').select();
 
         if (selectfilmUsedError) {
           console.log('Something went wrong!');
@@ -235,9 +248,14 @@ export const GameContextProvider = ({ children }: Props) => {
 
         const randomGameIndex = await generateUnusedRandomNumber();
 
-        const { data, error: insertError } = await supabase.from('game').insert({ current_day: todaysDate }).select();
+        const { data, error: insertError } = await supabase
+          .from('game')
+          .insert({ current_day: todaysDate })
+          .select();
 
-        const { error: insertIndexError } = await supabase.from('films_used').insert({ film_index: randomGameIndex });
+        const { error: insertIndexError } = await supabase
+          .from('films_used')
+          .insert({ film_index: randomGameIndex });
 
         if (insertError || insertIndexError) {
           console.log('Something went wrong!');
@@ -248,24 +266,34 @@ export const GameContextProvider = ({ children }: Props) => {
 
         if (!data) return;
 
-        const { data: gameDataDb, error: updateError } = await supabase.from('game').update({
-          film: selectedGame.title.replaceAll(' ', '-').toLowerCase(),
-          index: randomGameIndex
-        }).eq('id', data[0]?.id).select();
+        const { data: gameDataDb, error: updateError } = await supabase
+          .from('game')
+          .update({
+            film: selectedGame.title.replaceAll(' ', '-').toLowerCase(),
+            index: randomGameIndex,
+          })
+          .eq('id', data[0]?.id)
+          .select();
 
         if (updateError) {
           console.log('Something went wrong!');
           return;
         }
 
-        const { id: gameId, created_at: createdAt, film, current_day: currentDay, index } = gameDataDb[0];
+        const {
+          id: gameId,
+          created_at: createdAt,
+          film,
+          current_day: currentDay,
+          index,
+        } = gameDataDb[0];
 
         setGame({
           gameId,
           createdAt,
           film,
           currentDay,
-          index
+          index,
         });
         setFilm(gameData[randomGameIndex]);
       }
@@ -303,7 +331,7 @@ export const GameContextProvider = ({ children }: Props) => {
     handleSetGuess,
     handleSetFilm,
     handleDecrementLives,
-    handleSetEndState
+    handleSetEndState,
   };
 
   return (
