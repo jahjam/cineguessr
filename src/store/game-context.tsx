@@ -248,11 +248,14 @@ export const GameContextProvider = ({ children }: Props) => {
 
         const randomGameIndex = await generateUnusedRandomNumber();
 
+        // create the game in the DB
         const { data, error: insertError } = await supabase
           .from('game')
           .insert({ current_day: todaysDate })
           .select();
 
+        // store the index of the film so we can track if it's been used or not (we check above in the generateUnusedRandomNumber function
+        // to see if the games been used as we don't want to use the same film twice until they have all been used up)
         const { error: insertIndexError } = await supabase
           .from('films_used')
           .insert({ film_index: randomGameIndex });
@@ -262,10 +265,12 @@ export const GameContextProvider = ({ children }: Props) => {
           return;
         }
 
+        // use the random number to get a film from the list
         const selectedGame = gameData[randomGameIndex];
 
         if (!data) return;
 
+        // update the film in the DB with film title and the index it exists within the list
         const { data: gameDataDb, error: updateError } = await supabase
           .from('game')
           .update({
@@ -280,6 +285,7 @@ export const GameContextProvider = ({ children }: Props) => {
           return;
         }
 
+        // load the film into the app using the returned data from the update DB function
         const {
           id: gameId,
           created_at: createdAt,
