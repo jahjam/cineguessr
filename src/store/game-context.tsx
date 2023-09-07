@@ -159,7 +159,7 @@ export const GameContextProvider = ({ children }: Props) => {
           if (prevState.length) {
             return [...prevState];
           }
-          console.log(user);
+
           if (!user.hasPlayedToday && todaysDate === user.lastPlayed)
             return [...user.curCorrectLetters.split('')];
 
