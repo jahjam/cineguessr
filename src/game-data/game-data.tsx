@@ -14,3 +14,21 @@ export const gameData = [
     hint: 'AI is not to be trusted',
   },
 ];
+
+export const gameDataImgs = [
+  {
+    title: 'I Robot',
+    cards: [],
+    hint: 'AI is not to be trusted',
+  },
+  {
+    title: 'No Country For Old Men',
+    cards: [],
+    hint: 'There is absolutely no music in this film',
+  },
+  {
+    title: 'Blade Runner',
+    cards: [],
+    hint: 'Some people are peole, some are not',
+  },
+];
