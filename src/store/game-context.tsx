@@ -265,6 +265,18 @@ export const GameContextProvider = ({ children }: Props) => {
           return;
         }
 
+        /*
+        // TODO future implementation would be to generate AI images programmatically on load
+        // -- at the moment I have just generated them in the browser and stored them in the game data
+        // check if film already has generated images, if so, skip to getting film
+        if (!gameData[randomGameIndex].cards.length) {
+        // else generate the images
+        // use AI to generate the thumbnails
+        //
+        // store the generated thumbnails in the gameData data structure
+        }
+        */
+
         // use the random number to get a film from the list
         const selectedGame = gameData[randomGameIndex];
 
