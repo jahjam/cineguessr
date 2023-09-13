@@ -384,7 +384,7 @@ export const UserContextProvider = ({ children }: Props) => {
           .eq('user_id', userId);
         // TODO if userId but no data in DB, account no longer exists (error?), create a new one
         if (!data?.length) {
-          localStorage.clear();
+          localStorage.removeItem('userId');
           return;
         }
 
